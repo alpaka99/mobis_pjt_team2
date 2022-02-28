@@ -4,9 +4,9 @@
 #include "array.h"
 
 typedef struct Person{
-    int dong;           //동 ex)101,102,103,201,202,203 0이면 입주민x
+    int dong;           //동 ex)NULL이면 임직원아님, 나머지는 임직원
     int contac_num;     //연락처
-    char *memo;
+    // char *memo;
 } Person;
 
 typedef struct Location{
@@ -30,7 +30,7 @@ typedef struct Car_state{
     const char *plate_num;      //차번호
     Location location;          //주차위치
     Time enter_now;             //입차시각
-    Time exit_now;              //현재시각
+    Time exit_now;              //출차시각
     Person person;
 } Car_state;
 

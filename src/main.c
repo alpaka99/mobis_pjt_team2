@@ -13,9 +13,10 @@ int main(void){
         return nErr;
     }
     Time now;
-    Car_state car1={ "sonata", "red", "111가1111", {"B1",1,1}, now, now, {101,01011111111,"kim"} };
-    Car_state car2={ "G70", "blue", "222가2222", {"B1",1,2}, now, now, {102,01022222222,"lee"} };
-    Car_state car3={ "casper", "white", "333가3333", {"B1",1,3}, now, now, {103,01033333333,"park"} };
+    Car_state car1={ "sonata", "red", "111가1111", {"B1",1,1}, now, now, {"A",01011111111,"kim"} };
+    Car_state car2={ "G70", "blue", "222가2222", {"B1",1,2}, now, now, {"B",01022222222,"lee"} };
+    Car_state car3={ "casper", "white", "333가3333", {"B1",1,3}, now, now, {"C",01033333333,"park"} };
+    Car_state car4={ "avante", "red", "444가4444", {"B2",2,2}, now, now, {NULL,01044444444,"song"} };
     
     // array.c를 참고해서 (hash table or linked list)로 연결. 
     // 프로그램 실행중에 car객체를 만들고 싶다면 
@@ -42,15 +43,14 @@ int main(void){
         printf("3. 주차현황확인기능 \n");
         printf("4. 차량정보조회 \n");  
         printf("5. 주차이력관리 \n");
-        printf("6. 빈공간추천 \n");
-        printf("7. 장기주차목록 \n");
-        printf("8. exit \n");
+        printf("6. 장기주차목록 \n");
+        printf("7. exit \n");
         printf("select ---> ");
         int no=0;
         scanf("%d",&no); getchar(); //flush newline
         switch(no){
             case 1:
-                while(1){
+                while(1){ // 사용자가 시나리오 상으로 구현하기 위해 개입.
                     printf("입출차 여부를 선택하세요.(-1:이전으로, 1:입차, 2:출차) \n>> ");
                     // system()  @@
                     int sel_en_ex=0;
@@ -93,12 +93,9 @@ int main(void){
                 printf("주차이력관리 \n");
                 break;
             case 6:
-                printf("빈공간추천 \n");
-                break;
-            case 7:
                 printf("장기주차목록 \n");
                 break;
-            case 8:
+            case 7:
                 printf("exit function \n");
                 //save()  //iparking_state.txt에 (hash table or linked list) 저장
                 exit(0);
