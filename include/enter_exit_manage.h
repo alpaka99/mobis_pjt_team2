@@ -5,7 +5,7 @@
 
 typedef struct Person{
     int dong;           //동 ex)0이면 임직원아님, 나머지는 임직원
-    const char contac_num[15];     //연락처 ex) 01012345678
+    char contac_num[15];     //연락처 ex) 01012345678
     // char *memo;
 } Person;
 
@@ -25,9 +25,9 @@ typedef struct Time{
 } Time;
 
 typedef struct Car_state{
-    const char car_type[10];       //차종
-    const char color[10];          //색깔
-    const char plate_num[15];      //차번호
+    char car_type[10];       //차종
+    char color[10];          //색깔
+    char plate_num[15];      //차번호
     
     Location location;          //주차위치
     Time enter_now;             //입차시각

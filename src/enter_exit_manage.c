@@ -59,15 +59,11 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
     return 0;
 }
 
-int deep_copy(Car_state *psrc, Car_state *pdst){
-    // car_type, color, plate_num, location.floor, person.contac_num 에 대해 memcpy.
-    // memcpy(&p2, &p1, sizeof(struct Point2D));
-    return 0;
-}
 int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num){
 
     Car_state *lpcar;
-    Car_state *tmp_lpcar= (Car_state *)malloc(sizeof(Car_state));
+    Car_state *tmp_lpcar;
+    Car_state *lpOcar= (Car_state *)malloc(sizeof(Car_state));
 
     if(arrayGetAt(lpCarset, car_num, (LPDATA*) &lpcar)) return 1; 
     char plate_num[15];
@@ -78,16 +74,16 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
         //차번호를 lpInput과 대조하다가 일치하면 remove
         if(strcmp(plate_num, ((Car_state *)lpInput->lpData[i])->plate_num)==0){
             if(arrayGetAt(lpInput, i, (LPDATA*) &tmp_lpcar)) return 1; 
-            //지우기전에 lp_output_car_Array에 전달하기 위해 임시저장
-            deep_copy(lpcar, tmp_lpcar);
-            //깊은 복사 구현 함수 @
+            //지우기전에 car_state를 lp_output_car_Array에 전달하기 위해 tmp_lpcar로 주소를 가져옴
+            memcpy(lpOcar,tmp_lpcar,sizeof(Car_state));
+            //tmp_lpcar의 메모리 상태를 lpOcar에 깊은복사
             if(arrayRemoveAt(lpInput, i)) return 1; 
             
-            if(exit_time(tmp_lpcar)){ //출차시간 갱신
+            if(exit_time(lpOcar)){ //출차시간 갱신
                 printf("fail to execute exit_time.\n");
                 return 1;   
             }
-            if(arrayAdd(lpOutput, (const LPDATA) tmp_lpcar)) return 1;  
+            if(arrayAdd(lpOutput, (const LPDATA) lpOcar)) return 1;  
             //lp_output_car_Array에 append
             break;
         }
@@ -95,9 +91,8 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
         printf("해당 자동차는 주차장에 없습니다. \n");
     }
 
-    //주차요금 출력
+    //주차요금 출력@
     //~~
     //
-    free(tmp_lpcar);
     return 0;
 }

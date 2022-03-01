@@ -45,45 +45,55 @@ int main(void){
     for(int i=0; i<lp_input_car_Array->size; i++){
         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;
         printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
+        lpcar->person.dong, lpcar->person.contac_num); 
     }
     printf("==============\n");
 
     for(int i=0; i<lp_output_car_Array->size; i++){
         if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;
         printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
+        lpcar->person.dong, lpcar->person.contac_num); 
     }
     printf("==============\n");
     //test @
 
+    if(auth==1){
+        char passwd[]="0000";
+        char key[5];
+        while(1){
+            printf("비밀번호를 입력하세요.(-1:종료)\n>");
+            scanf("%s",&key); getchar(); //flush newline
+            if(strcmp(passwd,key)==0) break;
+            else{
+                if(atoi(key)==-1) return 0;
+                printf("틀렸습니다.\n");
+            }
+        }
+    }
     do{
         if(auth==1){
-            char passwd[]="0000";
-            char key[5];
-            while(1){
-                printf("비밀번호를 입력하세요.(-1:종료)\n>");
-                scanf("%s",&key); getchar(); //flush newline
-                if(strcmp(passwd,key)==0){
-                    printf("1. 입출차관리 \n");
-                    printf("2. 정산기능 \n");
-                    printf("3. 주차현황확인기능 \n");
-                    printf("4. 차량정보조회 \n");  
-                    printf("5. 주차이력관리 \n");
-                    printf("6. 장기주차목록 \n");
-                    printf("7. exit \n");
-                    printf("select ---> ");
-                    break;
-                } else{
-                    if(atoi(key)==-1) return 0;
-                    printf("틀렸습니다.\n");
-                }
-            }
+            printf("1. 입출차관리 \n");
+            printf("2. 정산기능 \n");
+            printf("3. 주차현황확인기능 \n");
+            printf("4. 차량정보조회 \n");  
+            printf("5. 주차이력관리 \n");
+            printf("6. 장기주차목록 \n");
+            printf("7. exit \n");
+            printf("select ---> ");
         } else if(auth==2){
             printf("2. 정산기능 \n");
             printf("3. 주차현황확인기능 \n");
             printf("7. exit \n");
             printf("select ---> ");
         }
-
         int no=0;
         scanf("%d",&no); getchar(); //flush newline
         switch(no){
