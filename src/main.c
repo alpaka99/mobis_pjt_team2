@@ -15,13 +15,13 @@ int main(void){
     if(arrayCreate(&lp_output_car_Array)) return 1;
     if(arrayCreate(&lp_car_set_Array)) return 1;
     
-    //car_set변경하고 싶다면 car_set_func.c참고.
-    //load
+    // car_set변경하고 싶다면 ../dat/car_state.txt참고.
+    // dat에 저장된 정보 load
     if(car_set_load(lp_car_set_Array)) return 1;
     if(input_car_load(lp_input_car_Array)) return 1;
     if(output_car_load(lp_output_car_Array)) return 1;
 
-    // log in 기능 구현@
+    // 사용자 권한 선택
     system("clear");
     printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
     int auth;
@@ -100,7 +100,6 @@ int main(void){
             case 1:
                 while(1){ // 사용자가 시나리오 상으로 구현하기 위해 개입.
                     printf("입출차 여부를 선택하세요.(-1:이전으로, 1:입차, 2:출차) \n>> ");
-                    // system()  @
                     int sel_en_ex=0;
                     scanf("%d",&sel_en_ex); getchar(); //flush newline
                     // aaa @
@@ -136,7 +135,9 @@ int main(void){
                 break;
             case 2:
                 printf("정산기능 \n");
-                //전화번호를 입력하면 현재까지 발생한 요금이 나오게 함.
+                // 입차한 car_state의 멤버변수 contac_num를 입력하면 현재까지 발생한 요금이 나오게 함. 
+                // person.dong이 0이면 임직원 아님.
+                // 2대 이상 차량 소유자도 있을 수 있으므로 contac_num에 일치하는 모든 차량에 대한 요금을 츨력해야 함. @
                 break;
             case 3:
                 printf("주차현황확인기능 \n");

@@ -91,7 +91,8 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
         printf("해당 자동차는 주차장에 없습니다. \n");
     }
 
-    //주차요금 출력@
+    //출차시 발생된 주차요금 출력@
+    // person.dong이 0이면 임직원 아님.
     //~~
     //
     return 0;
