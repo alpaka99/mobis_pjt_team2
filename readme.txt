@@ -1,0 +1,1 @@
+dat하위에 iparking_state.dat, oparking_state.dat가 있어야한다.
