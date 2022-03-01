@@ -58,6 +58,12 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
 
     return 0;
 }
+
+int deep_copy(Car_state *psrc, Car_state *pdst){
+    // car_type, color, plate_num, location.floor, person.contac_num 에 대해 memcpy.
+    // memcpy(&p2, &p1, sizeof(struct Point2D));
+    return 0;
+}
 int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num){
 
     Car_state *lpcar;
@@ -71,9 +77,10 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
     for(int i=0; i<lpInput->size; i++){
         //차번호를 lpInput과 대조하다가 일치하면 remove
         if(strcmp(plate_num, ((Car_state *)lpInput->lpData[i])->plate_num)==0){
-
             if(arrayGetAt(lpInput, i, (LPDATA*) &tmp_lpcar)) return 1; 
             //지우기전에 lp_output_car_Array에 전달하기 위해 임시저장
+            deep_copy(lpcar, tmp_lpcar);
+            //깊은 복사 구현 함수 @
             if(arrayRemoveAt(lpInput, i)) return 1; 
             
             if(exit_time(tmp_lpcar)){ //출차시간 갱신
@@ -82,11 +89,11 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
             }
             if(arrayAdd(lpOutput, (const LPDATA) tmp_lpcar)) return 1;  
             //lp_output_car_Array에 append
+            break;
         }
+        // lpInput에 일치하는 차번호가 없으면
+        printf("해당 자동차는 주차장에 없습니다. \n");
     }
-
-    //얕은 복사@
-
 
     //주차요금 출력
     //~~

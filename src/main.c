@@ -3,6 +3,7 @@
 #include "array.h"
 #include "enter_exit_manage.h"
 #include "save_load.h"
+#include <string.h>
 
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
 
@@ -20,7 +21,20 @@ int main(void){
     if(input_car_load(lp_input_car_Array)) return 1;
     if(output_car_load(lp_output_car_Array)) return 1;
 
+    // log in 기능 구현@
+    system("clear");
+    printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
+    int auth;
+    while(1){
+        scanf("%d",&auth); getchar(); //flush newline
+        if(auth!=1 && auth!=2){
+            printf("잘못 입력했습니다. \n");
+            continue;
+        }
+        break;
+    }
     //test @
+    printf("==============\n");
     Car_state *lpcar;    
     for(int i=0; i<lp_car_set_Array->size; i++){
         if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;
@@ -42,14 +56,34 @@ int main(void){
     //test @
 
     do{
-        printf("1. 입출차관리 \n");
-        printf("2. 정산기능 \n");
-        printf("3. 주차현황확인기능 \n");
-        printf("4. 차량정보조회 \n");  
-        printf("5. 주차이력관리 \n");
-        printf("6. 장기주차목록 \n");
-        printf("7. exit \n");
-        printf("select ---> ");
+        if(auth==1){
+            char passwd[]="0000";
+            char key[5];
+            while(1){
+                printf("비밀번호를 입력하세요.(-1:종료)\n>");
+                scanf("%s",&key); getchar(); //flush newline
+                if(strcmp(passwd,key)==0){
+                    printf("1. 입출차관리 \n");
+                    printf("2. 정산기능 \n");
+                    printf("3. 주차현황확인기능 \n");
+                    printf("4. 차량정보조회 \n");  
+                    printf("5. 주차이력관리 \n");
+                    printf("6. 장기주차목록 \n");
+                    printf("7. exit \n");
+                    printf("select ---> ");
+                    break;
+                } else{
+                    if(atoi(key)==-1) return 0;
+                    printf("틀렸습니다.\n");
+                }
+            }
+        } else if(auth==2){
+            printf("2. 정산기능 \n");
+            printf("3. 주차현황확인기능 \n");
+            printf("7. exit \n");
+            printf("select ---> ");
+        }
+
         int no=0;
         scanf("%d",&no); getchar(); //flush newline
         switch(no){
@@ -65,7 +99,7 @@ int main(void){
                         int car_num=0;
                         scanf("%d",&car_num); getchar(); //flush newline
                         if(car_num<1){          
-                            printf("해당 자동차는 없습니다. \n");
+                            printf("해당 자동차는 존재하지 않습니다. \n");
                         } else if(car_state_append(lp_input_car_Array, lp_car_set_Array, car_num-1)){      
                             //lp_input_car_Array에 차량상태 append
                             printf("fail to execute car_state_append.\n");
@@ -76,8 +110,8 @@ int main(void){
                         printf("출차하는 자동차는 몇번 자동차입니까? \n>>");
                         int car_num=0;
                         scanf("%d",&car_num); getchar(); //flush newline
-                        if(car_num<1){    // 또는 lp_input_car_Array에 해당 자동차가 없으면@
-                            printf("해당 자동차는 없습니다. \n");
+                        if(car_num<1){    
+                            printf("해당 자동차는 존재하지 않습니다. \n");
                         } else if(car_state_remove(lp_input_car_Array, lp_output_car_Array, lp_car_set_Array, car_num-1)){      
                             //lp_input_car_Array에서 차량상태 remove
                             //lp_output_car_Array에 차량상태 append 
@@ -86,7 +120,7 @@ int main(void){
                         }
                     } else {
                         if(sel_en_ex==-1) break;
-                        printf("잘못 눌렀습니다. \n");
+                        printf("잘못 입력했습니다. \n");
                     }
                 }
                 break;
