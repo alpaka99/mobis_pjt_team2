@@ -24,13 +24,19 @@ int main(void){
     Car_state *lpcar;    
     for(int i=0; i<lp_car_set_Array->size; i++){
         if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %10s  floor: %10s\n",lpcar->car_type, lpcar->location.floor);
+        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
     }
     printf("==============\n");
 
     for(int i=0; i<lp_input_car_Array->size; i++){
         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %10s  floor: %10s\n",lpcar->car_type, lpcar->location.floor);
+        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
+    }
+    printf("==============\n");
+
+    for(int i=0; i<lp_output_car_Array->size; i++){
+        if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;
+        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
     }
     printf("==============\n");
     //test @
@@ -54,7 +60,7 @@ int main(void){
                     int sel_en_ex=0;
                     scanf("%d",&sel_en_ex); getchar(); //flush newline
                     // aaa @
-                    if(sel_en_ex==1){    //입차 기능
+                    if(sel_en_ex==1){           
                         printf("입차하는 자동차는 몇번 자동차입니까? \n>>");
                         int car_num=0;
                         scanf("%d",&car_num); getchar(); //flush newline
@@ -64,18 +70,20 @@ int main(void){
                             //lp_input_car_Array에 차량상태 append
                             printf("fail to execute car_state_append.\n");
                             return 1;   
-                        }
+                        }  
+                    } else if(sel_en_ex==2){   
                         
-                    } else if(sel_en_ex==2){    //출차 기능
-                        //lp_input_car_Array에서 pop하면서 lp_output_car_Array에 append
-                        //주차요금 출력
-
-                        // printf("출차하는 자동차는 몇번 자동차입니까? \n>>");
-                        // scanf("%d",&car_num);lp_input_car_Array
-                        // if(!car_state_remove(lp_input_car_Array, car_num-1)){      //(hash table or linked list)에서 제거
-                        //     printf("fail to execute car_state_remove.\n");
-                        //     return 1;   
-                        // }
+                        printf("출차하는 자동차는 몇번 자동차입니까? \n>>");
+                        int car_num=0;
+                        scanf("%d",&car_num); getchar(); //flush newline
+                        if(car_num<1){    // 또는 lp_input_car_Array에 해당 자동차가 없으면@
+                            printf("해당 자동차는 없습니다. \n");
+                        } else if(car_state_remove(lp_input_car_Array, lp_output_car_Array, lp_car_set_Array, car_num-1)){      
+                            //lp_input_car_Array에서 차량상태 remove
+                            //lp_output_car_Array에 차량상태 append 
+                            printf("fail to execute car_state_pop.\n");
+                            return 1;   
+                        }
                     } else {
                         if(sel_en_ex==-1) break;
                         printf("잘못 눌렀습니다. \n");

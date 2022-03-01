@@ -37,6 +37,6 @@ typedef struct Car_state{
 
 int enter_exit_time(Car_state *car);
 int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num);
-int car_state_remove(LPARRAY lpArray, int car_num);
+int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num);
 
 #endif 
