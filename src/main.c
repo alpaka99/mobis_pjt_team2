@@ -103,14 +103,22 @@ int main(void){
                 while(1){
                 printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
                 printf("0000년 00월 00일 이후로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
-                int sel_date;
+                int sel_date = 0;
+                int year = 0, mon = 0, date = 0;
                 scanf("%d", &sel_date); getchar();
                 if(sel_date == -1) break;
-                if(sel_date == -2) break;
-                if(sel_date < 1){
+                else if(sel_date == -2) {
+                    printf("년도를 입력해주세요. (예 : 2021)\n");
+                    scanf("%d", &year); getchar();
+                    printf("월을 입력해주세요. %d년  (예 : 3)\n", year);
+                    scanf("%d", &mon); getchar();
+                    printf("일을 입력해주세요. %d년 %d월 (예 : 1)\n", year, mon);
+                    scanf("%d", &date); getchar();
+                }
+                if(sel_date < -2){
                     printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
                     }
-                else if(long_term_parking_list(lpArray, sel_date)) {
+                else if(long_term_parking_list(lpArray, sel_date, year, mon, date)) {
                     printf("fail to execute long_term_parking_list.\n");
                     }
                 }
