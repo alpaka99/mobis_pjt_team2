@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "array.h"
 #include "enter_exit_manage.h"
+#include "long_term_parking_list.h"
 
 int main(void){
     //배열을 관리하는 구조체 변수를 선언
@@ -32,6 +33,10 @@ int main(void){
         goto exit;
     }
     nErr = arrayAdd(lpArray, (const LPDATA) &car3);
+    if (ERR_ARRAY_OK != nErr) {
+        goto exit;
+    }
+    nErr = arrayAdd(lpArray, (const LPDATA) &car4);
     if (ERR_ARRAY_OK != nErr) {
         goto exit;
     }
@@ -93,7 +98,20 @@ int main(void){
                 printf("주차이력관리 \n");
                 break;
             case 6:
-                printf("장기주차목록 \n");
+                //printf("장기주차목록 \n");
+                system("clear");
+                printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
+                while(1){
+                int sel_date;
+                scanf("%d", &sel_date); getchar();
+                if(sel_date == -1) break;
+                if(sel_date < 1){
+                    printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
+                    }
+                else if(long_term_parking_list(lpArray)) {
+                    printf("fail to execute long_term_parking_list.\n");
+                    }
+                }
                 break;
             case 7:
                 printf("exit function \n");
@@ -107,6 +125,7 @@ int main(void){
     }while(1);
 
     return 0;
+    
 exit:
     //메모리를 해제합니다
     if (NULL != lpArray) {

@@ -30,6 +30,8 @@ int enter_exit_time(Car_state *lpcar){
 
     return 0;
 }
+
+
 int car_state_append(LPARRAY lpArray, int car_num){
     int nErr = ERR_ARRAY_OK;
     Car_state *lpcar;
@@ -51,7 +53,7 @@ int car_state_append(LPARRAY lpArray, int car_num){
 
     //debug@
     
-    //배열에서 얻은 값을 출력  
+    //배열에서 얻은 값을 출력
     car_state_output(lpcar);
     //debug@
     return 0;
