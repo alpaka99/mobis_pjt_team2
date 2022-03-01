@@ -99,16 +99,18 @@ int main(void){
                 break;
             case 6:
                 //printf("장기주차목록 \n");
-                system("clear");
-                printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
+                system("clear"); // 이전 내용 다 날리기
                 while(1){
+                printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
+                printf("0000년 00월 00일 이후로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
                 int sel_date;
                 scanf("%d", &sel_date); getchar();
                 if(sel_date == -1) break;
+                if(sel_date == -2) break;
                 if(sel_date < 1){
                     printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
                     }
-                else if(long_term_parking_list(lpArray)) {
+                else if(long_term_parking_list(lpArray, sel_date)) {
                     printf("fail to execute long_term_parking_list.\n");
                     }
                 }
