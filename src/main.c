@@ -13,6 +13,7 @@ int main(void){
     LPARRAY lp_input_car_Array = NULL; 
     LPARRAY lp_output_car_Array = NULL; 
     LPARRAY lp_car_set_Array = NULL; 
+
     if(arrayCreate(&lp_input_car_Array)) return 1;
     if(arrayCreate(&lp_output_car_Array)) return 1;
     if(arrayCreate(&lp_car_set_Array)) return 1;
@@ -152,6 +153,9 @@ int main(void){
                 break;
             case 5:
                 printf("주차이력관리 \n");
+                if(parking_history(lp_input_car_Array,lp_output_car_Array)){
+                    printf("fail to execute parking_history.\n");
+                }
                 break;
             case 6:
                 //printf("장기주차목록 \n");
