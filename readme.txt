@@ -6,3 +6,7 @@ dat하위에 iparking_state.dat, oparking_state.dat가 있어야한다.
 출차순으로 쫘라락,
 입차순으로 쫘라락, 
 각각에 요금정산하면 될거같다.
+
+test case:
+동일 차량 두번 입차
+입차목록에 없는 차량 출차 

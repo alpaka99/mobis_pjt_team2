@@ -45,17 +45,27 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
     Car_state *lpcar;
 
     if(arrayGetAt(lpCarset, car_num, (LPDATA*) &lpcar)) return 1; //car_num번째 index의 Car_state주소획득
-    
+    char plate_num[15];
+    strcpy(plate_num, lpcar->plate_num);
+    //lpCarset에서 car_num번째 차에 대한 차번호를 얻는다.
+   
+    for(int i=0; i<lpInput->size; i++){
+        if(strcmp(plate_num, ((Car_state *)lpInput->lpData[i])->plate_num)==0){
+             //입차목록에 해당 차량이 있다면
+            printf("해당 자동차는 이미 입차했습니다. \n");
+            return 0;
+        }
+    }
     if(enter_exit_time(lpcar)){ //입출차시간 갱신
-        printf("fail to execute enter_exit_time.\n");
-        return 1;   
+                printf("fail to execute enter_exit_time.\n");
+                return 1;   
     }
     if(car_positioning(lpcar)){ // 주차위치 결정
         printf("fail to execute car_positioning.\n");
         return 1;
     }
     if(arrayAdd(lpInput, (const LPDATA) lpcar)) return 1;   //lp_input_car_Array에 append
-
+    
     return 0;
 }
 
