@@ -1,6 +1,7 @@
 #include "save_load.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int car_set_save(Car_state *lpcar, int size){
     FILE *fwp;
@@ -16,6 +17,7 @@ int car_set_save(Car_state *lpcar, int size){
     fclose(fwp);
     return 0;
 }
+
 int car_set_load(LPARRAY lpArray){
     FILE *frp;
     Car_state *res;
@@ -34,6 +36,98 @@ int car_set_load(LPARRAY lpArray){
         if( arrayAdd(lpArray, (const LPDATA) res) ) return 1;
     }
     fclose(frp);
+    return 0;
+}
+int car_set_load_csv(LPARRAY lpArray){
+    FILE *pFile = NULL;
+    Car_state *res;
+    char str_tmp[1024];
+    char *tkn;
+    int cnt;
+    if((pFile=fopen("car_set.csv","r"))==NULL){
+        printf("fail to open car_set.dat\n");
+        return 1;
+    }      
+    while( !feof( pFile ) ){
+        fgets( str_tmp, 1024, pFile );   
+        res=(Car_state *)malloc(sizeof(Car_state));       
+        tkn = strtok(str_tmp, ",");
+        cnt=1;
+        while(tkn != NULL){
+            switch (cnt)
+            {
+            case 1:
+                strcpy(res->car_type,tkn);
+                break;
+            case 2:
+                strcpy(res->color,tkn);
+                break;
+            case 3:
+                strcpy(res->plate_num,tkn);
+                break;
+            case 4:
+                strcpy(res->location.floor,tkn);
+                break;
+            case 5:
+                res->location.row=atoi(tkn);
+                break;
+            case 6:
+                res->location.col=atoi(tkn);
+                break;
+            case 7:
+                res->enter_now.year=atoi(tkn);
+                break;
+            case 8:
+                res->enter_now.month=atoi(tkn);
+                break;
+            case 9:
+                res->enter_now.day=atoi(tkn);
+                break;
+            case 10:
+                res->enter_now.hour=atoi(tkn);
+                break;
+            case 11:
+                res->enter_now.minute=atoi(tkn);
+                break;
+            case 12:
+                res->enter_now.second=atoi(tkn);
+                break;
+            case 13:
+                res->exit_now.year=atoi(tkn);
+                break;
+            case 14:
+                res->exit_now.month=atoi(tkn);
+                break;
+            case 15:
+                res->exit_now.day=atoi(tkn);
+                break;
+            case 16:
+                res->exit_now.hour=atoi(tkn);
+                break;
+            case 17:
+                res->exit_now.minute=atoi(tkn);
+                break;
+            case 18:
+                res->exit_now.second=atoi(tkn);
+                break;
+            case 19:
+                res->person.dong=atoi(tkn);
+                break;
+            case 20:
+                strcpy(res->person.contac_num,tkn);
+                break;
+            case 21:
+                res->cost=atof(tkn);
+                break;    
+            default:
+                break;
+            }
+            tkn=strtok(NULL, ",");
+            cnt++;
+        }
+        if( arrayAdd(lpArray, (const LPDATA) res) ) return 1;
+    }
+    fclose( pFile );
     return 0;
 }
 

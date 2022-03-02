@@ -20,14 +20,12 @@ int main(void){
     if(arrayCreate(&lp_output_car_Array)) return 1;
     if(arrayCreate(&lp_car_set_Array)) return 1;
     
-    // car_set변경하고 싶다면 ../dat/car_state.txt참고.
-    // dat에 저장된 정보 load
-    if(car_set_load(lp_car_set_Array)) return 1;
+    if(car_set_load_csv(lp_car_set_Array)) return 1;
     if(input_car_load(lp_input_car_Array)) return 1;
     if(output_car_load(lp_output_car_Array)) return 1;
 
     // 사용자 권한 선택
-    system("clear");
+    system("clear"); 
     printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
     int auth;
     while(1){
@@ -46,7 +44,12 @@ int main(void){
     Car_state *lpcar;    
     for(int i=0; i<lp_car_set_Array->size; i++){
         if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %8s 임직원 여부:%d동 주차요금:%d원\n",lpcar->car_type, lpcar->person.dong, lpcar->cost);
+        printf("type: %8s 임직원 여부:%d동 주차요금:%lf원\n",lpcar->car_type, lpcar->person.dong, lpcar->cost);
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
+        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
+        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
     }
     printf("==============\n");
 

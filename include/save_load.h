@@ -8,4 +8,6 @@ int input_car_load(LPARRAY lpArray);
 int output_car_load(LPARRAY lpArray);
 int input_car_save(LPARRAY lpArray);
 int output_car_save(LPARRAY lpArray);
+int car_set_load_csv(LPARRAY lpArray);
+
 #endif 

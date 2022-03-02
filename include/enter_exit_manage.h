@@ -34,7 +34,7 @@ typedef struct Car_state{
     Time exit_now;              //출차시각
     Person person;
     double cost;
-} Car_state;    //120byte
+} Car_state;    //128byte
 
 int enter_exit_time(Car_state *car);
 int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num);
