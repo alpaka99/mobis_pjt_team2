@@ -28,9 +28,9 @@ int calc_diff_min(Car_state *lpcar, int *ret_diff){
     return 0;
 }
 
-int fee_calculate(Car_state * lpOcar){
+int fee_calculate(Car_state *lpOcar){
     int diff_min;
-    if(calc_diff_min(lpOcar,&diff_min)){  //세부요금규정결정필요@
+    if(calc_diff_min(lpOcar,&diff_min)){ 
         printf("fail to execute carc_diff_min.\n");
         return 1;  
     }  
@@ -42,7 +42,8 @@ int fee_calculate(Car_state * lpOcar){
         coef=0.5;
     }
     cost=(double)diff_min*cost_pm*coef;
-    
+    lpOcar->cost=cost;              //2.정산기능때 저장되는 경우는 쓰레기값임.
+
     printf("주차요금은 %f원 입니다.\n",cost);
     return 0;
 }
@@ -55,7 +56,7 @@ int get_car_plate_to_put_fee(LPARRAY lpInput, char *car_plate_num){
             // car_plate_num와 일치하면
             if(arrayGetAt(lpInput, i, (LPDATA*) &tmp_lpcar)) return 1; 
             // 해당 car_state를 얻는다.
-            fee_calculate(tmp_lpcar);
+            if(fee_calculate(tmp_lpcar)) return 1; 
             //car_state에 대해 fee_calculate.
             return 0;
         }

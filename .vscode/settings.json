@@ -8,6 +8,7 @@
         "save_load.h": "c",
         "limits": "c",
         "fee_calcurate.h": "c",
-        "fee_calculate.h": "c"
+        "fee_calculate.h": "c",
+        "stdio.h": "c"
     }
 }

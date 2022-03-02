@@ -43,29 +43,29 @@ int main(void){
     Car_state *lpcar;    
     for(int i=0; i<lp_car_set_Array->size; i++){
         if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
+        printf("type: %8s 임직원 여부:%d동 주차요금:%d원\n",lpcar->car_type, lpcar->person.dong, lpcar->cost);
     }
     printf("==============\n");
 
     for(int i=0; i<lp_input_car_Array->size; i++){
         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;
         printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
         lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
         lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
         lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num); 
+        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
     }
     printf("==============\n");
 
     for(int i=0; i<lp_output_car_Array->size; i++){
         if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;
         printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
         lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
         lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
         lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num); 
+        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
     }
     printf("==============\n");
     //test @
@@ -154,7 +154,7 @@ int main(void){
                 }
                 break;
             case 3:
-                printf("주차현황확인기능 \n");
+                printf("주차현황 확인기능 \n");
                 break;
             case 4:
                 if(auth==1){

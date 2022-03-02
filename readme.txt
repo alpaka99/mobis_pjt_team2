@@ -3,8 +3,8 @@ dat하위에 iparking_state.dat, oparking_state.dat가 있어야한다.
 입차목록에는 동일 차량(car_num일치)이 존재하면 안되지만 
 출차목록에는 동일 차량(car_num일치)이 존재해도 된다.
 주차현황관리기능해서는 
-출차순으로 쫘라락,
-입차순으로 쫘라락, 
+출차순으로 쫘라락, oparking_state
+입차순으로 쫘라락, iparking_state
 각각에 요금정산하면 될거같다.
 
 test case:
