@@ -183,6 +183,7 @@ int main(void){
             case 6:
                 if(auth==1){
                     printf("장기주차목록 \n");
+                    while(1){
                     printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
                     printf("0000년 00월 00일 이전으로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
                     int sel_date = 0;
@@ -203,6 +204,7 @@ int main(void){
                     else if(long_term_parking_list(lp_input_car_Array, sel_date, year, mon, date)) {
                         printf("fail to execute long_term_parking_list.\n");
                         }
+                    }
                 }else{
                     printf("접근 불가합니다.\n");
                 }

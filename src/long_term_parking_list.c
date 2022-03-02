@@ -49,7 +49,7 @@ int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d
     lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
     lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
     lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-    lpcar->person.dong, lpcar->person.contac_num);
+    lpcar->person.dong, lpcar->person.contac_num); // 조건없이 일단은 그냥 출력, 나중에 수정하겠음
 
     if(sel_date > 0 && tm_day >= sel_date){
     }
