@@ -16,6 +16,7 @@
 				"${fileDirname}\\long_term_parking_list.c",
 				"${fileDirname}\\parking_history.c",
 				"${fileDirname}\\save_load.c",
+				"${fileDirname}\\display_parking_lot.c",
 				// "${fileDirname}\\parking_status.c",
 				"-I",
 				"../include",

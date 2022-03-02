@@ -72,8 +72,7 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
 }
 
 int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num){
-
-    //debug@
+    extern Car_state parking_lot[3][3][10];
     Car_state *lpcar;
     Car_state *tmp_lpcar;
     Car_state *lpOcar= (Car_state *)malloc(sizeof(Car_state));
@@ -101,9 +100,15 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
             }
             if(arrayAdd(lpOutput, (const LPDATA) lpOcar)) return 1;  
             //lp_output_car_Array에 append
-
             if(fee_calculate(lpOcar)) return 1;
-            //주차요금 계산
+            //주차요금 출력 및 car_state에 저장
+            int flr;
+            if(strcmp(lpOcar->location.floor,"B1")==0) flr =0;
+            if(strcmp(lpOcar->location.floor,"B2")==0) flr =1;
+            if(strcmp(lpOcar->location.floor,"B3")==0) flr =2;
+            Time now;
+            Car_state tmp_car={ "", "", "", {"",0,0}, now, now, {0,""},0.0 };
+            memcpy(&parking_lot[flr][lpOcar->location.row][lpOcar->location.col], &tmp_car, sizeof(tmp_car)); //깊은 복사
 
             break;
         }

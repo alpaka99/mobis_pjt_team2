@@ -4,6 +4,8 @@
         "stdlib.h": "c",
         "stdio.h": "c",
         "save_load.h": "c",
-        "long_term_parking_list.h": "c"
+        "long_term_parking_list.h": "c",
+        "display_parking_lot.h": "c",
+        "enter_exit_manage.h": "c"
     }
 }

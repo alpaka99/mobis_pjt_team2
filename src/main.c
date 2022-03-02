@@ -8,8 +8,10 @@
 #include <string.h>
 #include "fee_calculate.h"
 #include <ctype.h>
+#include "display_parking_lot.h"
 
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
+Car_state parking_lot[3][3][10];
 
 int main(void){
     LPARRAY lp_input_car_Array = NULL; 
@@ -23,51 +25,10 @@ int main(void){
     if(car_set_load_csv(lp_car_set_Array)) return 1;
     if(input_car_load(lp_input_car_Array)) return 1;
     if(output_car_load(lp_output_car_Array)) return 1;
-    //---@
-    Car_state parking_lot[3][10][10];
-    Time now;
-    printf("배열 초기화 시작");
-    getchar();
-    Car_state tmp_car={ "", "", "", {"",0,0}, now, now, {0,"00000000000"},0 };
-    for(int i=0;i<3;i++){
-        for(int j=0;j<10;j++){
-            for(int k=0;k<10;k++){
-                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); //깊은 복사
-            }
-        }
-    }
-// 주차장을 표현할 3차원 배열
-    Car_state* tmp; // lpArray에 있는 차 한대에 대한 정보를 받아옴
-    int nErr;  // Error code
-    int floor, row, col; // 차의 위치에 대한 정보 저장
-    // lpArray 내의 정보를 읽어와서 주차장에 배열에 배치
-    printf("어레이 크기 %d\n", lp_car_set_Array->size);
-    for(int i=0;i<lp_car_set_Array->size;i++){
-        printf("%d번째\n", i);
-    nErr = arrayGetAt(lp_car_set_Array, i, (LPDATA*) &tmp);
-    if (nErr){
-        printf("Error while loading lpArray\n");
-        return 1;
-    }
-    floor = (int)(tmp->location.floor[1]) - (int)'0' - 1;
-    row = (int)(tmp->location.row)-1;
-    col = (int)(tmp->location.col)-1;
-    printf("%d, %d, %d\n", floor, row, col);
-    parking_lot[floor][row][col] = *tmp;
-    }
-    for(int i=0;i<3;i++){
-        for(int j=0;j<10;j++){
-            for(int k=0;k<10;k++){
-                printf("%d", parking_lot[i][j][k].location.row);
-            }
-            printf("\n");
-        }
-        printf("\n");
-        printf("\n");
-    }
-    getchar();
-    //---@
-    
+
+    init_parking_lot();
+    display_parking_lot(lp_input_car_Array); //@
+
     // 사용자 권한 선택
     system("clear"); 
     printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
@@ -137,8 +98,6 @@ int main(void){
         }
     }
    
-    // load() //iparking_state.txt load해서 (hash table or linked list) 생성
-
     do{
         if(auth==1){
             printf("1. 입출차관리 \n");
@@ -210,7 +169,7 @@ int main(void){
                 }
                 break;
             case 3:
-                printf("주차현황 확인기능 \n");
+                display_parking_lot(lp_input_car_Array); //@
                 break;
             case 4:
                 if(auth==1){
