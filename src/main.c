@@ -135,6 +135,7 @@ int main(void){
                 break;
             case 2:
                 printf("정산기능 \n");
+                // 차번호 입력?
                 // 입차한 car_state의 멤버변수 contac_num를 입력하면 현재까지 발생한 요금이 나오게 함. 
                 // person.dong이 0이면 임직원 아님.
                 // 2대 이상 차량 소유자도 있을 수 있으므로 contac_num에 일치하는 모든 차량에 대한 요금을 츨력해야 함. @
