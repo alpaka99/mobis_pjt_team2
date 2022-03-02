@@ -57,7 +57,9 @@ int get_car_plate_to_put_fee(LPARRAY lpInput, char *car_plate_num){
             // 해당 car_state를 얻는다.
             fee_calculate(tmp_lpcar);
             //car_state에 대해 fee_calculate.
+            return 0;
         }
     }
+    printf("해당 자동차는 입차하지 않았습니다.\n");
     return 0;
 }

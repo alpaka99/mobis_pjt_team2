@@ -5,6 +5,7 @@
 #include "save_load.h"
 #include <string.h>
 #include "fee_calculate.h"
+#include <ctype.h>
 
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
 
@@ -27,7 +28,10 @@ int main(void){
     printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
     int auth;
     while(1){
-        scanf("%d",&auth); getchar(); //flush newline
+        char sel[5];
+        scanf("%s",&sel); getchar(); //flush newline
+        auth=atoi(sel); 
+
         if(auth!=1 && auth!=2){
             printf("잘못 입력했습니다. \n");
             continue;
@@ -96,19 +100,23 @@ int main(void){
             printf("7. exit \n");
             printf("select ---> ");
         }
-        int no=0;
-        scanf("%d",&no); getchar(); //flush newline
+        
+        char sel[5];
+        scanf("%s",&sel); getchar(); //flush newline
+        int no=atoi(sel);           
+        
         switch(no){
             case 1:
-                while(1){ // 사용자가 시나리오 상으로 구현하기 위해 개입.
+                while(1){ 
                     printf("입출차 여부를 선택하세요.(-1:이전으로, 1:입차, 2:출차) \n>> ");
-                    int sel_en_ex=0;
-                    scanf("%d",&sel_en_ex); getchar(); //flush newline
-                    // aaa @
+                    char sel[5];
+                    scanf("%s",&sel); getchar(); //flush newline
+                    int sel_en_ex=atoi(sel);
                     if(sel_en_ex==1){           
                         printf("입차하는 자동차는 몇번 자동차입니까? \n>>");
-                        int car_num=0;
-                        scanf("%d",&car_num); getchar(); //flush newline
+                        char sel[5];
+                        scanf("%s",&sel); getchar(); //flush newline
+                        int car_num=atoi(sel); 
                         if(car_num<1){          
                             printf("해당 자동차는 존재하지 않습니다. \n");
                         } else if(car_state_append(lp_input_car_Array, lp_car_set_Array, car_num-1)){      
@@ -118,8 +126,9 @@ int main(void){
                         }  
                     } else if(sel_en_ex==2){   
                         printf("출차하는 자동차는 몇번 자동차입니까? \n>");
-                        int car_num=0;
-                        scanf("%d",&car_num); getchar(); //flush newline
+                        char sel[5];
+                        scanf("%s",&sel); getchar(); //flush newline
+                        int car_num=atoi(sel); 
                         if(car_num<1){    
                             printf("해당 자동차는 존재하지 않습니다. \n");
                         } else if(car_state_remove(lp_input_car_Array, lp_output_car_Array, lp_car_set_Array, car_num-1)){      
@@ -139,7 +148,6 @@ int main(void){
                 printf("차량번호를 입력하세요.\n>");
                 char plate_num[15];
                 scanf("%s",plate_num); getchar(); //flush newline
-                printf("%s\n",plate_num);
                 if(get_car_plate_to_put_fee(lp_input_car_Array, plate_num)){
                     printf("fail to execute get_car_plate_to_put_fee.\n");
                     return 1;
@@ -149,13 +157,25 @@ int main(void){
                 printf("주차현황확인기능 \n");
                 break;
             case 4:
-                printf("차량정보조회 \n");
+                if(auth==1){
+                    printf("차량정보조회 \n");
+                }else{
+                    printf("접근 불가합니다.\n");
+                }
                 break;
             case 5:
-                printf("주차이력관리 \n");
+                if(auth==1){
+                    printf("주차이력관리 \n");
+                }else{
+                    printf("접근 불가합니다.\n");
+                }
                 break;
             case 6:
-                printf("장기주차목록 \n");
+                if(auth==1){
+                    printf("장기주차목록 \n");
+                }else{
+                    printf("접근 불가합니다.\n");
+                }
                 break;
             case 7:
                 printf("exit function \n");

@@ -10,3 +10,5 @@ dat하위에 iparking_state.dat, oparking_state.dat가 있어야한다.
 test case:
 동일 차량 두번 입차
 입차목록에 없는 차량 출차 
+숫자선택요구에 문자숫자섞어서 입력
+->1 or 2 선택에 대해 1aaa2b1b입력 (해결못함)
