@@ -3,6 +3,7 @@
         "string.h": "c",
         "stdlib.h": "c",
         "stdio.h": "c",
-        "save_load.h": "c"
+        "save_load.h": "c",
+        "long_term_parking_list.h": "c"
     }
 }
