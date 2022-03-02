@@ -1,14 +1,25 @@
 #include "car_positioning.h"
 #include <stdio.h>
+#include <string.h>
+
 int car_positioning(Car_state *car){
-    //parkingmap.txt load
-    //가까운 빈공간 추천을 사용할 것인가?
-    //y: 동(엘베출입문) 기반으로 가까운 위치결정(bfs) 
-    //n:랜덤으로 위치결정
+    // 주차 위치 결정
     
-    // car->location.floor=
-    // car->location.row=
-    // car->location.col=
-    printf("executed car_positioning.\n");
+    //parkingmap.txt load
+    //임의결정/가까운 빈공간 추천 선택
+
+    printf("층수를 선택해주세요.[B1/B2/B3]\n>");
+    char floor[10];
+    // gets(floor);  floor[strlen(floor)-1]='\0';
+    scanf("%s",floor); getchar(); //flush newline
+    strcpy(car->location.floor,floor);
+    printf("행을 선택해주세요.[1-3]\n>");   
+    int row;
+    scanf("%d",&row); getchar(); //flush newline
+    car->location.row=row-1;
+    printf("열을 선택해주세요.[1-10]\n>"); 
+    int col;
+    scanf("%d",&col); getchar(); //flush newline
+    car->location.col=col-1;
     return 0;
 }

@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "enter_exit_manage.h": "c",
+        "array.h": "c",
+        "car_positioning.h": "c",
+        "string.h": "c",
+        "car_set_func.h": "c",
+        "save_load.h": "c"
+    }
+}
