@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 dat하위에 iparking_state.dat, oparking_state.dat가 있어야한다.
 
 입차목록에는 동일 차량(car_num일치)이 존재하면 안되지만 
@@ -14,4 +12,3 @@ test case:
 입차목록에 없는 차량 출차 
 숫자선택요구에 문자숫자섞어서 입력
 ->1 or 2 선택에 대해 1aaa2b1b입력 (해결못함)
->>>>>>> Develop

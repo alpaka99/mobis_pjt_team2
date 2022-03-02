@@ -59,8 +59,8 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
         }
     }
     if(enter_exit_time(lpcar)){ //입출차시간 갱신
-                printf("fail to execute enter_exit_time.\n");
-                return 1;   
+        printf("fail to execute enter_exit_time.\n");
+        return 1;   
     }
     if(car_positioning(lpcar)){ // 주차위치 결정
         printf("fail to execute car_positioning.\n");
