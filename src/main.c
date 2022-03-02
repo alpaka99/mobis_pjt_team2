@@ -6,6 +6,8 @@
 #include "save_load.h"
 #include "parking_history.h"
 #include <string.h>
+#include "fee_calculate.h"
+#include <ctype.h>
 
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
 
@@ -29,7 +31,10 @@ int main(void){
     printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
     int auth;
     while(1){
-        scanf("%d",&auth); getchar(); //flush newline
+        char sel[5];
+        scanf("%s",&sel); getchar(); //flush newline
+        auth=atoi(sel); 
+
         if(auth!=1 && auth!=2){
             printf("잘못 입력했습니다. \n");
             continue;
@@ -41,29 +46,29 @@ int main(void){
     Car_state *lpcar;    
     for(int i=0; i<lp_car_set_Array->size; i++){
         if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
+        printf("type: %8s 임직원 여부:%d동 주차요금:%d원\n",lpcar->car_type, lpcar->person.dong, lpcar->cost);
     }
     printf("==============\n");
 
     for(int i=0; i<lp_input_car_Array->size; i++){
         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;
         printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
         lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
         lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
         lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num); 
+        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
     }
     printf("==============\n");
 
     for(int i=0; i<lp_output_car_Array->size; i++){
         if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;
         printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
         lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
         lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
         lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num); 
+        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
     }
     printf("==============\n");
     //test @
@@ -95,24 +100,29 @@ int main(void){
             printf("7. exit \n");
             printf("select ---> ");
         } else if(auth==2){
+            printf("1. 입출차관리 \n");
             printf("2. 정산기능 \n");
             printf("3. 주차현황확인기능 \n");
             printf("7. exit \n");
             printf("select ---> ");
         }
-        int no=0;
-        scanf("%d",&no); getchar(); //flush newline
+        
+        char sel[5];
+        scanf("%s",&sel); getchar(); //flush newline
+        int no=atoi(sel);           
+        
         switch(no){
             case 1:
-                while(1){ // 사용자가 시나리오 상으로 구현하기 위해 개입.
+                while(1){ 
                     printf("입출차 여부를 선택하세요.(-1:이전으로, 1:입차, 2:출차) \n>> ");
-                    int sel_en_ex=0;
-                    scanf("%d",&sel_en_ex); getchar(); //flush newline
-                    // aaa @
+                    char sel[5];
+                    scanf("%s",&sel); getchar(); //flush newline
+                    int sel_en_ex=atoi(sel);
                     if(sel_en_ex==1){           
                         printf("입차하는 자동차는 몇번 자동차입니까? \n>>");
-                        int car_num=0;
-                        scanf("%d",&car_num); getchar(); //flush newline
+                        char sel[5];
+                        scanf("%s",&sel); getchar(); //flush newline
+                        int car_num=atoi(sel); 
                         if(car_num<1){          
                             printf("해당 자동차는 존재하지 않습니다. \n");
                         } else if(car_state_append(lp_input_car_Array, lp_car_set_Array, car_num-1)){      
@@ -121,10 +131,10 @@ int main(void){
                             return 1;   
                         }  
                     } else if(sel_en_ex==2){   
-                        
-                        printf("출차하는 자동차는 몇번 자동차입니까? \n>>");
-                        int car_num=0;
-                        scanf("%d",&car_num); getchar(); //flush newline
+                        printf("출차하는 자동차는 몇번 자동차입니까? \n>");
+                        char sel[5];
+                        scanf("%s",&sel); getchar(); //flush newline
+                        int car_num=atoi(sel); 
                         if(car_num<1){    
                             printf("해당 자동차는 존재하지 않습니다. \n");
                         } else if(car_state_remove(lp_input_car_Array, lp_output_car_Array, lp_car_set_Array, car_num-1)){      
@@ -140,47 +150,61 @@ int main(void){
                 }
                 break;
             case 2:
-                printf("정산기능 \n");
-                // 입차한 car_state의 멤버변수 contac_num를 입력하면 현재까지 발생한 요금이 나오게 함. 
-                // person.dong이 0이면 임직원 아님.
-                // 2대 이상 차량 소유자도 있을 수 있으므로 contac_num에 일치하는 모든 차량에 대한 요금을 츨력해야 함. @
+                // 입차한 car_state의 멤버변수 plate_num를 입력하면 현재까지 발생한 요금이 나오게 함.
+                printf("차량번호를 입력하세요.\n>");
+                char plate_num[15];
+                scanf("%s",plate_num); getchar(); //flush newline
+                if(get_car_plate_to_put_fee(lp_input_car_Array, plate_num)){
+                    printf("fail to execute get_car_plate_to_put_fee.\n");
+                    return 1;
+                }
                 break;
             case 3:
-                printf("주차현황확인기능 \n");
+                printf("주차현황 확인기능 \n");
                 break;
             case 4:
-                printf("차량정보조회 \n");
+                if(auth==1){
+                    printf("차량정보조회 \n");
+                }else{
+                    printf("접근 불가합니다.\n");
+                }
                 break;
             case 5:
-                printf("주차이력관리 \n");
-                if(parking_history(lp_input_car_Array,lp_output_car_Array)){
-                    printf("fail to execute parking_history.\n");
+                if(auth==1){
+                    printf("주차이력관리 \n");
+                    if(parking_history(lp_input_car_Array,lp_output_car_Array)){
+                        printf("fail to execute parking_history.\n");
+                    }
+                }else{
+                    printf("접근 불가합니다.\n");
                 }
                 break;
+
             case 6:
-                //printf("장기주차목록 \n");
-                system("clear"); // 이전 내용 다 날리기
-                while(1){
-                printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
-                printf("0000년 00월 00일 이전으로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
-                int sel_date = 0;
-                int year = 0, mon = 0, date = 0;
-                scanf("%d", &sel_date); getchar();
-                if(sel_date == -1) break;
-                else if(sel_date == -2) {
-                    printf("년도를 입력해주세요. (예 : 2021)\n");
-                    scanf("%d", &year); getchar();
-                    printf("월을 입력해주세요. %d년  (예 : 3)\n", year);
-                    scanf("%d", &mon); getchar();
-                    printf("일을 입력해주세요. %d년 %d월 (예 : 1)\n", year, mon);
-                    scanf("%d", &date); getchar();
-                }
-                if(sel_date < -2){
-                    printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
+                if(auth==1){
+                    printf("장기주차목록 \n");
+                    printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
+                    printf("0000년 00월 00일 이전으로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
+                    int sel_date = 0;
+                    int year = 0, mon = 0, date = 0;
+                    scanf("%d", &sel_date); getchar();
+                    if(sel_date == -1) break;
+                    else if(sel_date == -2) {
+                        printf("년도를 입력해주세요. (예 : 2021)\n");
+                        scanf("%d", &year); getchar();
+                        printf("월을 입력해주세요. %d년  (예 : 3)\n", year);
+                        scanf("%d", &mon); getchar();
+                        printf("일을 입력해주세요. %d년 %d월 (예 : 1)\n", year, mon);
+                        scanf("%d", &date); getchar();
                     }
-                else if(long_term_parking_list(lp_input_car_Array, sel_date, year, mon, date)) {
-                    printf("fail to execute long_term_parking_list.\n");
-                    }
+                    if(sel_date < -2){
+                        printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
+                        }
+                    else if(long_term_parking_list(lp_input_car_Array, sel_date, year, mon, date)) {
+                        printf("fail to execute long_term_parking_list.\n");
+                        }
+                }else{
+                    printf("접근 불가합니다.\n");
                 }
                 break;
             case 7:

@@ -33,6 +33,7 @@ typedef struct Car_state{
     Time enter_now;             //입차시각
     Time exit_now;              //출차시각
     Person person;
+    double cost;
 } Car_state;    //120byte
 
 int enter_exit_time(Car_state *car);
