@@ -73,6 +73,7 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
 
 int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num){
 
+    //debug@
     Car_state *lpcar;
     Car_state *tmp_lpcar;
     Car_state *lpOcar= (Car_state *)malloc(sizeof(Car_state));
