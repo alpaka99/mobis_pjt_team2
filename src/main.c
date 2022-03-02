@@ -4,6 +4,7 @@
 #include "enter_exit_manage.h"
 #include "long_term_parking_list.h"
 #include "save_load.h"
+#include "parking_history.h"
 #include <string.h>
 
 int save(LPARRAY lpiArray, LPARRAY lpoArray);

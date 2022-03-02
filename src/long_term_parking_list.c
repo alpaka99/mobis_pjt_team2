@@ -23,6 +23,7 @@ int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d
     int        tm_day, tm_day2, tm_hour, tm_min, tm_sec;
     double     d_diff, d_diff2;
     struct tm  user_stime, car_stime;
+    
     if(sel_date > 0) {
         year = lpcar->enter_now.year;
         mon = lpcar->enter_now.month;
@@ -37,15 +38,20 @@ int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d
         user_stime.tm_sec    = 0;
         user_stime.tm_isdst  = 0;        // 썸머 타임 사용 안함
     
-
+    //printf("%s\n", lpcar->car_type);
+    
     tm_st = mktime( &user_stime);
     time( &tm_nd);
     d_diff = difftime( tm_nd, tm_st);
     tm_day = d_diff / ( 60 *60 * 24); 
+    
+    printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
+    lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+    lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+    lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
+    lpcar->person.dong, lpcar->person.contac_num);
 
     if(sel_date > 0 && tm_day >= sel_date){
-        printf( "%d년 %d월 %d일부터 %d일 지났음\n",year, mon, date, tm_day);
-        printf("%s\n", lpcar->car_type);
     }
     else if(sel_date == 0){
         car_stime.tm_year = lpcar->enter_now.year - 1900;

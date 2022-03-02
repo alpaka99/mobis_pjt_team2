@@ -41,9 +41,6 @@ int exit_time(Car_state *lpcar){
     return 0;
 }
 
-int car_state_append(LPARRAY lpArray, int car_num){
-    int nErr = ERR_ARRAY_OK;
-}
 int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
     Car_state *lpcar;
 
