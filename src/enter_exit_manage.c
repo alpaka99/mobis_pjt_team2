@@ -69,12 +69,15 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
     char plate_num[15];
     strcpy(plate_num, lpcar->plate_num);
     //lpCarset에서 car_num번째 차에 대한 차번호를 얻는다.
-
+    if(lpInput->size==0){
+        printf("주차장이 비었습니다.\n");
+        return 0;
+    }
     for(int i=0; i<lpInput->size; i++){
         //차번호를 lpInput과 대조하다가 일치하면 remove
         if(strcmp(plate_num, ((Car_state *)lpInput->lpData[i])->plate_num)==0){
             if(arrayGetAt(lpInput, i, (LPDATA*) &tmp_lpcar)) return 1; 
-            //지우기전에 car_state를 lp_output_car_Array에 전달하기 위해 tmp_lpcar로 주소를 가져옴
+            //지우기전에 car_state를 lp_output_car_Array에 전달하기위해 tmp_lpcar로 주소를 가져옴
             memcpy(lpOcar,tmp_lpcar,sizeof(Car_state));
             //tmp_lpcar의 메모리 상태를 lpOcar에 깊은복사
             if(arrayRemoveAt(lpInput, i)) return 1; 
@@ -85,15 +88,26 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
             }
             if(arrayAdd(lpOutput, (const LPDATA) lpOcar)) return 1;  
             //lp_output_car_Array에 append
+
+            // //출차시 발생된 주차요금 출력@--
+            // int diff= lpOcar->exit_now.hour - lpOcar->enter_now.hour;  //세부요금규정결정필요@
+            // int coef,cost,cost_ph;
+            // cost_ph=5000; 
+            // if(lpOcar->person.dong==0){     //임직원 아닌 경우
+            //     coef=1;
+            // }else{                          //임직원인 경우
+            //     coef=0.5;
+            // }
+            // cost=diff*cost_ph*coef;
+            
+            // //--
             break;
         }
         // lpInput에 일치하는 차번호가 없으면
-        printf("해당 자동차는 주차장에 없습니다. \n");
+        if(i==lpInput->size-1){ //0!=-1
+            printf("해당 자동차는 주차장에 없습니다. \n");
+        }
     }
-
-    //출차시 발생된 주차요금 출력@
-    // person.dong이 0이면 임직원 아님.
-    //~~
-    //
+    
     return 0;
 }
