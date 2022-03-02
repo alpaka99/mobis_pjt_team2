@@ -75,7 +75,10 @@ int main(void){
         char key[5];
         while(1){
             printf("비밀번호를 입력하세요.(-1:종료)\n>");
+            system("stty -echo");
             scanf("%s",&key); getchar(); //flush newline
+            printf("\n");
+            system("stty echo");
             if(strcmp(passwd,key)==0) break;
             else{
                 if(atoi(key)==-1) return 0;
