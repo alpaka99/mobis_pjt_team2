@@ -13,6 +13,7 @@
 				"${fileDirname}\\car_positioning.c",
 				"${fileDirname}\\array.c",
 				"${fileDirname}\\save_load.c",
+				"${fileDirname}\\fee_calculate.c",
 				"-I",
 				"..\\include",
 				"-o",

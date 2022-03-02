@@ -5,6 +5,9 @@
         "car_positioning.h": "c",
         "string.h": "c",
         "car_set_func.h": "c",
-        "save_load.h": "c"
+        "save_load.h": "c",
+        "limits": "c",
+        "fee_calcurate.h": "c",
+        "fee_calculate.h": "c"
     }
 }

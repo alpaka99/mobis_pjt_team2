@@ -4,6 +4,7 @@
 #include "enter_exit_manage.h"
 #include "save_load.h"
 #include <string.h>
+#include "fee_calculate.h"
 
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
 
@@ -89,6 +90,7 @@ int main(void){
             printf("7. exit \n");
             printf("select ---> ");
         } else if(auth==2){
+            printf("1. 입출차관리 \n");
             printf("2. 정산기능 \n");
             printf("3. 주차현황확인기능 \n");
             printf("7. exit \n");
@@ -115,8 +117,7 @@ int main(void){
                             return 1;   
                         }  
                     } else if(sel_en_ex==2){   
-                        
-                        printf("출차하는 자동차는 몇번 자동차입니까? \n>>");
+                        printf("출차하는 자동차는 몇번 자동차입니까? \n>");
                         int car_num=0;
                         scanf("%d",&car_num); getchar(); //flush newline
                         if(car_num<1){    
@@ -134,11 +135,15 @@ int main(void){
                 }
                 break;
             case 2:
-                printf("정산기능 \n");
-                // 차번호 입력?
-                // 입차한 car_state의 멤버변수 contac_num를 입력하면 현재까지 발생한 요금이 나오게 함. 
-                // person.dong이 0이면 임직원 아님.
-                // 2대 이상 차량 소유자도 있을 수 있으므로 contac_num에 일치하는 모든 차량에 대한 요금을 츨력해야 함. @
+                // 입차한 car_state의 멤버변수 plate_num를 입력하면 현재까지 발생한 요금이 나오게 함.
+                printf("차량번호를 입력하세요.\n>");
+                char plate_num[15];
+                scanf("%s",plate_num); getchar(); //flush newline
+                printf("%s\n",plate_num);
+                if(get_car_plate_to_put_fee(lp_input_car_Array, plate_num)){
+                    printf("fail to execute get_car_plate_to_put_fee.\n");
+                    return 1;
+                }
                 break;
             case 3:
                 printf("주차현황확인기능 \n");

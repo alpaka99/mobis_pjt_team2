@@ -5,6 +5,7 @@
 #include "car_positioning.h"
 #include <time.h>
 #include <string.h>
+#include "fee_calculate.h"
 
 int enter_exit_time(Car_state *lpcar){
     struct tm *today;
@@ -40,6 +41,7 @@ int exit_time(Car_state *lpcar){
     lpcar->exit_now.second = today->tm_sec;
     return 0;
 }
+
 
 int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
     Car_state *lpcar;
@@ -99,18 +101,9 @@ int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int ca
             if(arrayAdd(lpOutput, (const LPDATA) lpOcar)) return 1;  
             //lp_output_car_Array에 append
 
-            // //출차시 발생된 주차요금 출력@--
-            // int diff= lpOcar->exit_now.hour - lpOcar->enter_now.hour;  //세부요금규정결정필요@
-            // int coef,cost,cost_ph;
-            // cost_ph=5000; 
-            // if(lpOcar->person.dong==0){     //임직원 아닌 경우
-            //     coef=1;
-            // }else{                          //임직원인 경우
-            //     coef=0.5;
-            // }
-            // cost=diff*cost_ph*coef;
-            
-            // //--
+            if(fee_calculate(lpOcar)) return 1;
+            //주차요금 계산
+
             break;
         }
         // lpInput에 일치하는 차번호가 없으면
