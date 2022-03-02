@@ -102,7 +102,7 @@ int main(void){
                 system("clear"); // 이전 내용 다 날리기
                 while(1){
                 printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
-                printf("0000년 00월 00일 이후로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
+                printf("0000년 00월 00일 이전으로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n");
                 int sel_date = 0;
                 int year = 0, mon = 0, date = 0;
                 scanf("%d", &sel_date); getchar();
