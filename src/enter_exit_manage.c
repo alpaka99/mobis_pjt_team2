@@ -6,6 +6,19 @@
 #include <time.h>
 #include <string.h>
 #include "fee_calculate.h"
+#include "save_load.h"
+
+int disp_car_state(Car_state *lpcar){
+    printf("차량정보:(%s,%s,%s), 주차위치:(%s,%d,%d), 주차요금:%f원, 인적사항:(%d동, %s)\n입차시각:(%d.%d.%d %dh:%dm:%ds), 출차시각:(%d.%d.%d %dh:%dm:%ds)\n",\
+    lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+    lpcar->cost, lpcar->person.dong, lpcar->person.contac_num,\
+    lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+    lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second); 
+}
+int save(LPARRAY lpiArray, LPARRAY lpoArray){
+    input_car_save(lpiArray);
+    output_car_save(lpoArray);
+}
 
 int enter_exit_time(Car_state *lpcar){
     struct tm *today;

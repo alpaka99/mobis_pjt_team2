@@ -3,46 +3,7 @@
 #include <string.h>
 #include "array.h"
 #include "enter_exit_manage.h"
-// #include "parking_status.h"
-
-int init_parking_lot(LPARRAY lpArray,Car_state parking_lot[3][10][10])
-{
-  printf("배열 초기화 시작");
-  getchar();
-  // 주차장을 표현할 3차원 배열
-
-  Car_state* tmp; // lpArray에 있는 차 한대에 대한 정보를 받아옴
-  int nErr;  // Error code
-  int floor, row, col; // 차의 위치에 대한 정보 저장
-
-  // lpArray 내의 정보를 읽어와서 주차장에 배열에 배치
-  for(int i=0;i<arraySize(lpArray);i++){
-    nErr = arrayGetAt(lpArray, i, (LPDATA*) &tmp);
-    if (nErr){
-        printf("Error while loading lpArray\n");
-        return 1;
-    }
-    floor = (int)(tmp->location.floor[1]) - (int)'0' - 1;
-    row = (int)(tmp->location.row)-1;
-    col = (int)(tmp->location.col)-1;
-    // parking_lot[floor][row][col] = *tmp;
-    printf("%d %d %d\n", floor,row,col);
-    parking_lot[floor][row][col] = *tmp;
-    // ppl[floor][row][col] = *tmp;
-  }
-
- for(int i=0;i<3;i++){
-        for(int j=0;j<10;j++){
-            for(int k=0;k<10;k++){
-                printf("%d", parking_lot[i][j][k].location.row);
-            }
-            printf("\n");
-        }
-        printf("\n");
-        printf("\n");
-    }
-  getchar();
-}
+#include "parking_status.h"
 
 int parking_status_check(LPARRAY lpArray, Car_state parking_lot[3][10][10])
 {
@@ -75,6 +36,7 @@ int parking_status_check(LPARRAY lpArray, Car_state parking_lot[3][10][10])
     printf("\n\n");
  }
 
+// parking_status_check제거예정@
 
 int inputline(FILE* fp, char** str)
 {
@@ -97,69 +59,72 @@ int inputline(FILE* fp, char** str)
   // return line;
 }
 
-int info_car_num(LPARRAY lpArray,char* car_num)
+int info_car_num(LPARRAY lpArray,char *car_num, int *flag)
 {
   Car_state *tmp;
   for(int i=0; i<arraySize(lpArray);i++){
-
-  arrayGetAt(lpArray,i,(LPDATA*) &tmp);
-    if (strcmp(tmp->plate_num, car_num)==0) // 두 문자열이 같으면 0 반환
-        {
-        printf("%s %s %s %s %d %d\n", tmp->car_type, tmp->color, tmp->plate_num, tmp->location.floor, tmp->location.row, tmp->location.col);
-        return 0;
-        }
+    arrayGetAt(lpArray,i,(LPDATA*) &tmp);
+    if (strcmp(tmp->plate_num, car_num)==0) 
+    {
+      disp_car_state(tmp);
+      *flag=0;
+      return 0;
+    }
   }  
   return 1;
 }
 
-int info_car_loc(LPARRAY lpArray, Car_state parking_lot[3][10][10], char* car_loc)
+int info_car_loc(LPARRAY lpArray, char* car_loc, int *flag)
 {
-    Car_state *tmp;
-    for(int i=0; i<arraySize(lpArray);i++){
-        arrayGetAt(lpArray,i,(LPDATA*) &tmp);
-        // printf("%s\n", car_loc);
-        int floor, row, col;
-        floor = (int)car_loc[1]-(int)'0'-1;
-        row = (int)car_loc[3]-(int)'0'-1;
-        col = (int)car_loc[5]-(int)'0'-1;
+  extern Car_state parking_lot[3][10][10];
+  Car_state *tmp;
+  for(int i=0; i<arraySize(lpArray);i++){
+    arrayGetAt(lpArray,i,(LPDATA*) &tmp);
+  
+    int floor, row, col;
+    floor = (int)car_loc[1]-(int)'0'-1;
+    row = (int)car_loc[3]-(int)'0'-1;
+    col = (int)car_loc[5]-(int)'0'-1;
 
-        printf("%d %d %d \n", floor, row, col);
-
-        if (parking_lot[floor][row][col].plate_num != NULL){ // 두 문자열이 같으면 0 반환
-            printf("%s %s %s %s %d %d\n", tmp->car_type, tmp->color, tmp->plate_num, tmp->location.floor, tmp->location.row, tmp->location.col);
-            return 0;
-        }
-    }  
+    if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){ 
+      disp_car_state(tmp);
+      *flag=0;
+      return 0;
+    }
+  }  
   return 1;
 }
 
-int parking_check(LPARRAY lpArray, Car_state parking_lot[3][10][10])
+int parking_check(LPARRAY lpArray)
 {
+  extern Car_state parking_lot[3][10][10];
   int parking_check_key;
   int cErr;
   char *car_num;
   char *car_loc;
-  while(1)
+  int flag=1;
+  while(flag)
   {
-    printf("1. 차량번호를 입력하시겠습니까?\n");
-    printf("2. 위치를 입력하시겠습니까?\n");
-    scanf("%d", &parking_check_key);getchar();
+    printf("1: 차량번호를 입력, 2: 위치 입력, -1: 종료\n");
+    char sel[5];
+    scanf("%s",&sel); getchar(); //flush newline
+    parking_check_key=atoi(sel); 
 
     switch(parking_check_key){
       case 1:
-        printf("차량 번호를 형식에 맞게 입력해주세요(예시 : 111가1111)");
+        printf("차량 번호를 형식에 맞게 입력해주세요(예시: 111가1111)");
         inputline(stdin, &car_num);
-        cErr = info_car_num(lpArray, car_num);
+        cErr = info_car_num(lpArray, car_num, &flag);
         if(cErr){
-            printf("Matching car not found\n");
+            printf("해당 자동차는 주차장에 없습니다.\n");
         }
         break;
       case 2:
-        printf("위치를 형식에 맞게 입력해주세요(예시 : B1-3-3)");
+        printf("위치를 형식에 맞게 입력해주세요(예시: B1-3-3)");
         inputline(stdin, &car_loc);
-        cErr = info_car_loc(lpArray, parking_lot, car_loc);
+        cErr = info_car_loc(lpArray, car_loc, &flag);
         if(cErr){
-            printf("Matching car not found\n");
+            printf("해당 자동차는 주차장에 없습니다.\n");
         }
         break;
       case -1:

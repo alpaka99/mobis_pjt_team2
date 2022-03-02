@@ -9,8 +9,8 @@
 #include "fee_calculate.h"
 #include <ctype.h>
 #include "display_parking_lot.h"
+#include "parking_status.h"
 
-int save(LPARRAY lpiArray, LPARRAY lpoArray);
 Car_state parking_lot[3][3][10];
 
 int main(void){
@@ -49,34 +49,19 @@ int main(void){
     Car_state *lpcar;    
     for(int i=0; i<lp_car_set_Array->size; i++){
         if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %8s 임직원 여부:%d동 주차요금:%lf원\n",lpcar->car_type, lpcar->person.dong, lpcar->cost);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
-        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
-        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
-        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
+        disp_car_state(lpcar);
     }
     printf("==============\n");
 
     for(int i=0; i<lp_input_car_Array->size; i++){
         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
-        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
-        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
-        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
+        disp_car_state(lpcar);
     }
     printf("==============\n");
 
     for(int i=0; i<lp_output_car_Array->size; i++){
         if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;
-        printf("type: %8s 입차시각:(%dm:%ds) 출차시각:(%dm:%ds)\n",lpcar->car_type,  lpcar->enter_now.minute, lpcar->enter_now.second, lpcar->exit_now.minute, lpcar->exit_now.second);
-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)|주차요금:%f원\n",\
-        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
-        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
-        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-        lpcar->person.dong, lpcar->person.contac_num, lpcar->cost); 
+        disp_car_state(lpcar);
     }
     printf("==============\n");
     //test @
@@ -169,11 +154,11 @@ int main(void){
                 }
                 break;
             case 3:
-                display_parking_lot(lp_input_car_Array); //@
+                display_parking_lot(lp_input_car_Array); 
                 break;
             case 4:
                 if(auth==1){
-                    printf("차량정보조회 \n");
+                    parking_check(lp_input_car_Array); //@
                 }else{
                     printf("접근 불가합니다.\n");
                 }
@@ -222,7 +207,7 @@ int main(void){
                 break;
             case 7:
                 printf("exit function \n");
-                save(lp_input_car_Array,lp_output_car_Array);  //iparking_state.dat에  lp_input_car_Array 저장
+                save(lp_input_car_Array,lp_output_car_Array);  //dat 파일에 입차 및 출차 정보 저장
                 exit(0);
                 break;
             default:
@@ -232,19 +217,4 @@ int main(void){
     }while(1);
 
     return 0;
-}
-
-int save(LPARRAY lpiArray, LPARRAY lpoArray){
-    input_car_save(lpiArray);
-    output_car_save(lpoArray);
-    
-    //table형식으로 바꿔야함
-    // int cnt=lpInput->size;
-    // fprintf(fwp,"순번[%d]: 차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
-    // cnt,\
-    // lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
-    // lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
-    // lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-    // lpcar->person.dong, lpcar->person.contac_num); 
-    // fclose(fwp);
 }
