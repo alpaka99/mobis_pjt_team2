@@ -112,6 +112,7 @@ int main(void){
         switch(no){
             case 1:
                 while(1){ 
+                    system("clear");
                     printf("입출차 여부를 선택하세요.(-1:이전으로, 1:입차, 2:출차) \n>> ");
                     char sel[5];
                     scanf("%s",&sel); getchar(); //flush newline

@@ -83,14 +83,20 @@ int info_car_loc(LPARRAY lpArray, char *car_loc, int *flag, int str_size)
 {
   Car_state *tmp;
   int floor, row, col;
+  char *token_1,*token_2,*token_3;
 
-  if(str_size==7){
+  token_1 = strtok(car_loc, "-");
+  token_2 = strtok(NULL, "-");
+  token_3 = strtok(NULL, "-");
+  // printf("token_1: %s, token_2: %s, token_3: %s\n",token_1,token_2,token_3);
+  if(str_size==7||str_size==8){ //B1-A-10
     for(int i=0; i<arraySize(lpArray);i++){
       arrayGetAt(lpArray,i,(LPDATA*) &tmp);
       
-      floor = (int)car_loc[1]-(int)'0'-1;
-      row = (int)car_loc[3]-(int)'0'-1;
-      col = (int)car_loc[5]-(int)'0'-1;
+      floor = (int)token_1[1]-(int)'0'-1;
+      row = token_2[0]-(int)'A';  
+      col= atoi(token_3)-1;  
+      // printf("floor:%d, row:%d, col:%d\n",floor,row,col);
       
       if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){ 
         until_now_cost(tmp);
@@ -116,6 +122,7 @@ int parking_check(LPARRAY lpArray)
   int str_size;
   while(flag)
   {
+    system("clear");
     printf("입력할 정보를 선택하세요.(-1: 이전으로, 1: 차량번호, 2: 위치)\n");
     char sel[5];
     scanf("%s",&sel); getchar(); //flush newline
@@ -125,20 +132,13 @@ int parking_check(LPARRAY lpArray)
       case 1:
         printf("차량 번호를 입력하세요.(ex. 111가1111)\n");
         inputline(stdin, &car_num, &str_size);
-        system("clear");
         cErr = info_car_num(lpArray, car_num, &flag);
         if(cErr){
             printf("해당 자동차는 주차장에 없습니다.\n");
         }
-        printf("(다음: 아무거나입력)");
-        system("stty -echo");
-        char sel;
-        sel=getchar(); clear_buffer();
-        system("stty echo");
-        system("clear");
         break;
       case 2:
-        printf("주차 위치를 입력하세요.(ex. B1-3-3)");
+        printf("주차 위치를 입력하세요.(ex. B1-A-3)");
         inputline(stdin, &car_loc, &str_size);
         system("clear");
         cErr = info_car_loc(lpArray, car_loc, &flag, str_size);
@@ -149,5 +149,9 @@ int parking_check(LPARRAY lpArray)
       case -1:
         return 0;
     }
+    printf("(다음: 아무거나입력)");
+    system("stty -echo");
+    char sel_c=getchar(); clear_buffer();
+    system("stty echo");
   }
 }
