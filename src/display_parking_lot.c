@@ -12,12 +12,12 @@ int init_parking_lot(){
     extern Car_state parking_lot[3][3][10];
 
     Time now;
-    Car_state tmp_car={ "", "", "", {"",0,0}, now, now, {0,""},0.0 };
-    // parking_lot ì´ˆê¸°í™”
+    Car_state tmp_car={ "\0", "", "", {"",0,0}, now, now, {0,""},0.0 };
+    // parking_lot ÃÊ±âÈ­
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             for(int k=0;k<10;k++){
-                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); //ê¹Šì€ ë³µì‚¬
+                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); //±íÀº º¹»ç
             }
         }
     }
@@ -27,12 +27,12 @@ int display_parking_lot(LPARRAY lp_IArray){
     extern Car_state parking_lot[3][3][10];
 
     system("clear");
-    printf("\n\n====================================================ì£¼ì°¨í˜„í™©====================================================");
+    printf("\n\n====================================================ÁÖÂ÷ÇöÈ²====================================================");
 
     Car_state* tmp;         
     int floor, num_B1=0, num_B2=0, num_B3=0;   
 
-    // ì£¼ì°¨ìž¥ mapping
+    // ÁÖÂ÷Àå mapping
     for(int i=0;i<lp_IArray->size;i++){
         if(arrayGetAt(lp_IArray, i, (LPDATA*) &tmp)) return 1;
         
@@ -51,47 +51,85 @@ int display_parking_lot(LPARRAY lp_IArray){
         parking_lot[floor][tmp->location.row][tmp->location.col] = *tmp;
     }
     // UI
-    // unicode ì°¸ê³ : https://unicode-table.com/kr/blocks/box-drawing/
-    printf("\n\n    ì „ì²´ ì£¼ì°¨ëŒ€ìˆ˜: %d/30", lp_IArray->size);
+    // unicode Âü°í: https://unicode-table.com/kr/blocks/box-drawing/
+    printf("\n\n    ÀüÃ¼ ÁÖÂ÷´ë¼ö: %d/30", lp_IArray->size);
     for(int i=0; i<71; i++) printf(" ");
-    printf("0 : ì¢…ë£Œ\n");
+    printf("0 : Á¾·á\n");
     for(int i=0; i<84; i++) printf(" ");
-    printf("ì•„ë¬´ê±°ë‚˜ìž…ë ¥: ë‹¤ìŒìœ¼ë¡œ\n");
+    printf("¾Æ¹«°Å³ªÀÔ·Â: ´ÙÀ½À¸·Î\n");
 
     for(int i=0;i<3;i++){
-        if(i==0) printf("\n\n    ì§€í•˜ 1 ì¸µ ì£¼ì°¨ëŒ€ìˆ˜: %d/10\n",num_B1);
-        else if(i==1) printf("\n\n    ì§€í•˜ 2 ì¸µ ì£¼ì°¨ëŒ€ìˆ˜: %d/10\n",num_B2);
-        else if(i==2) printf("\n\n    ì§€í•˜ 3 ì¸µ ì£¼ì°¨ëŒ€ìˆ˜: %d/10\n",num_B3);
+        if(i==0) printf("\n\n    ÁöÇÏ 1 Ãþ ÁÖÂ÷´ë¼ö: %d/10\n",num_B1);
+        else if(i==1) printf("\n\n    ÁöÇÏ 2 Ãþ ÁÖÂ÷´ë¼ö: %d/10\n",num_B2);
+        else if(i==2) printf("\n\n    ÁöÇÏ 3 Ãþ ÁÖÂ÷´ë¼ö: %d/10\n",num_B3);
         printf("\n    \u250f");
         for(int z=0; z<99; z++){
             printf("\u2501");
         }      
-        printf("\u2513\n    \u2503");  
+        printf("\u2513\n    \u2503");
+
+        printf("\t\t\t\t¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤\n");
+        printf("\t\t\t\t¦¢       ¸ðºñ½º ÁÖÂ÷Àå     ¦¢\n");
+        printf("\t\t\t\t¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥\n");
+
         for(int j=0;j<3;j++){
-            for(int k=0;k<10*3;k++){
-                if(0<=k && k<10){
-                    printf("%9s\u2503", "");
-                }else if(10<=k && k<20){
-                    printf("%9s\u2503", parking_lot[i][j][k-10].plate_num); 
-                }else{
-                    printf("%9s\u2503", "");
-                }
-                if(k==9 || k==19) printf("\n    \u2503");
-            }
-            if(j!=2){
-                printf("\n    \u2523");
-                for(int z=0; z<99; z++){
-                    printf("\u2501");
-                }      
-                printf("\u252b\n    \u2503"); 
+
+          char r = (char)(j+(int)'A');
+          for(int k=0;k<10;k++){
+            printf("¦£¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¤");
+          }printf("\n");
+
+          for(int k=0;k<10;k++)
+          {
+            printf("¦¢   %c%d   ¦¢", r,k+1); // ÁÂÇ¥Ãâ·Â
+          }printf("\n");
+
+          for(int k=0;k<10;k++){
+            printf("¦§¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦©");
+          }printf("\n");
+
+          for(int k=0;k<10;k++){
+            printf("¦¢        ¦¢");
+          }printf("\n");
+
+          // ¹øÈ£ÆÇ Ãâ·Â ½ÃÀÛ
+          for(int k=0;k<10;k++)
+          {
+            if(parking_lot[i][j][k].color=="\0"){
+            printf("¦¢        ¦¢");
             }
             else{
-                printf("\n    \u2517");
-                for(int z=0; z<99; z++){
-                    printf("\u2501");
-                }      
-                printf("\u251b"); 
+              char str[20];
+              strcpy(str, parking_lot[i][j][k].plate_num);
+              char *ptr = strtok(str, " ");
+              printf("¦¢  %s ¦¢",ptr);
             }
+                }      
+            }
+          }printf("\n");
+
+          for(int k=0;k<10;k++)
+          {
+            if(parking_lot[i][j][k].color=="\0"){
+            printf("¦¢        ¦¢");
+            }
+            else{
+              char str[20];
+              strcpy(str, parking_lot[i][j][k].plate_num);
+              char *ptr = strtok(str, " ");
+              ptr = strtok(NULL,"\0");
+              printf("¦¢  %s  ¦¢", ptr);
+            }
+                }      
+            }
+          }printf("\n");
+          
+          //¹øÈ£ÆÇ Ãâ·Â ³¡
+          
+          for(int k=0;k<10;k++){
+            printf("¦¦¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¡¦¥");
+          }printf("\n");
+                  
         }
         printf("\n\n");
         
