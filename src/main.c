@@ -10,6 +10,7 @@
 #include <ctype.h>
 #include "display_parking_lot.h"
 #include "parking_status.h"
+#include "empty_space_recom.h"
 
 Car_state parking_lot[3][3][10];
 
@@ -91,13 +92,15 @@ int main(void){
             printf("4. 차량정보조회 \n");  
             printf("5. 주차이력관리 \n");
             printf("6. 장기주차목록 \n");
-            printf("7. exit \n");
+            printf("7. 빈공간추천 \n");
+            printf("8. exit \n");
             printf("select ---> ");
         } else if(auth==2){
             printf("1. 입출차관리 \n");
             printf("2. 정산기능 \n");
             printf("3. 주차현황확인기능 \n");
-            printf("7. exit \n");
+            printf("7. 빈공간추천 \n");
+            printf("8. exit \n");
             printf("select ---> ");
         }
         
@@ -214,6 +217,11 @@ int main(void){
                 }
                 break;
             case 7:
+                system("clear");
+                printf("빈 공간 추천");
+                empty_space_recom(parking_lot);
+                break;
+            case 8:
                 printf("exit function \n");
                 save(lp_input_car_Array,lp_output_car_Array);  //dat 파일에 입차 및 출차 정보 저장
                 exit(0);
