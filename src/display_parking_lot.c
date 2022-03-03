@@ -23,7 +23,7 @@ int init_parking_lot(){
     }
     return 0;
 }
-int display_parking_lot(LPARRAY lp_IArray){
+int display_parking_lot(LPARRAY lp_IArray, LPARRAY lp_OArray){
     extern Car_state parking_lot[3][3][10];
     
     system("clear");
@@ -100,7 +100,10 @@ int display_parking_lot(LPARRAY lp_IArray){
         sel=getchar(); clear_buffer();
         system("stty echo");
         int flag=sel-'0';  // char to int
-        if(flag==0) exit(0);
+        if(flag==0){
+            save(lp_IArray, lp_OArray);
+            exit(0);
+        }
     }
     return 0;
 }
