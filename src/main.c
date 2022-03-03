@@ -176,17 +176,27 @@ int main(void){
 
             case 6:
                 if(auth==1){
+                    system("clear");
                     printf("장기주차목록 \n");
                     while(1){
-                        printf("몇 일 이상 주차된 차량에 대해 정보를 출력하시겠습니까?(-1 입력 시 뒤로 가기)\n");
-                        printf("0000년 00월 00일 이전으로 주차된 차량에 대해 확인하고 싶으면 -2을 입력해주세요.\n"); //@
+                        printf("다음과 같은 목록 중 검색하고 싶은 양식을 선택해주세요.\n");
+                        printf("1. 일 수 (예 : 500일 이상으로 장기 주차한 차량에 대해 검색) \n");
+                        printf("2. 날짜 (예 : 2020년 3월 1일 이전에 입차했던 차량에 대해 검색 \n");
+                        printf("-1. 뒤로가기 \n");
+                        int sel_pl_num = 0; // select parking list num;
                         int sel_date = 0;
                         int year = 0, mon = 0, date = 0;
-                        char sel[5];
-                        scanf("%s",&sel); getchar(); //flush newline
-                        sel_date=atoi(sel); 
-                        if(sel_date == -1) break;
-                        else if(sel_date == -2) {
+                        scanf("%s",&sel_pl_num); getchar(); //flush newline
+                        if(sel_pl_num == -1) break;
+                        else if(sel_pl_num == 1){
+                            while(1){
+                            scanf("%d", &sel_date); getchar();
+                            if(sel_date < 1)
+                                printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
+                            else break;
+                            }
+                        }
+                        else if(sel_pl_num == 2) {
                             printf("년도를 입력해주세요. (예 : 2021)\n");
                             scanf("%d", &year); getchar();
                             printf("월을 입력해주세요. %d년  (예 : 3)\n", year);
@@ -194,10 +204,7 @@ int main(void){
                             printf("일을 입력해주세요. %d년 %d월 (예 : 1)\n", year, mon);
                             scanf("%d", &date); getchar();
                         }
-                        if(sel_date < -2){
-                            printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
-                            }
-                        else if(long_term_parking_list(lp_input_car_Array, sel_date, year, mon, date)) {
+                        if(long_term_parking_list(lp_input_car_Array, sel_date, year, mon, date)) {
                             printf("fail to execute long_term_parking_list.\n");
                             }
                     }

@@ -4,18 +4,6 @@
 #include "enter_exit_manage.h"
 #include <time.h>
 
-int now_time(Time *now){
-    struct tm *today;
-    time_t current;
-    time(&current);
-    today=localtime(&current);
-    now->year = today->tm_year + 1900;
-    now->month = today->tm_mon + 1;
-    now->day = today->tm_mday;
-    now->hour = today->tm_hour;
-    now->minute = today->tm_min;
-}
-
 int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int date)
 {
     time_t     tm_st, tm_st2;
@@ -43,15 +31,15 @@ int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d
     tm_st = mktime( &user_stime);
     time( &tm_nd);
     d_diff = difftime( tm_nd, tm_st);
-    tm_day = d_diff / ( 60 *60 * 24); 
+    tm_day = d_diff / ( 60 *60 * 24);  // sel_date가 0보다 클 경우 lpcar 내의 차와 현재시간을 비교
+    // year, min, date로 들어올 경우 해당 날짜와 현재시간을 비교
     
-    printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\
-    lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
-    lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
-    lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\
-    lpcar->person.dong, lpcar->person.contac_num); // 조건없이 일단은 그냥 출력, 나중에 수정하겠음
 
-    if(sel_date > 0 && tm_day >= sel_date){
+    if(sel_date > 0 && tm_day >= sel_date){ // sel_date 보다 tm_day가 더 크면 -> 장기 주차 기간이 내가 설정한 날보다 크면
+        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)| 인적사항:(%d동, %s)\n",\
+        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+        lpcar->person.dong, lpcar->person.contac_num);
     }
     else if(sel_date == 0){
         car_stime.tm_year = lpcar->enter_now.year - 1900;
@@ -66,7 +54,10 @@ int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d
         d_diff2 = difftime( tm_nd, tm_st2);
         tm_day2 = d_diff2 / ( 60 *60 * 24);
         if(tm_day2 >= tm_day){
-            printf("%s\n", lpcar->car_type);
+            printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)| 인적사항:(%d동, %s)\n",\
+            lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+            lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+            lpcar->person.dong, lpcar->person.contac_num);
         }
     }
         return 0;
