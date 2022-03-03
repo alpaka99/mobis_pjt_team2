@@ -22,6 +22,7 @@ int calc_diff_min(Car_state *lpcar, int *ret_diff){
     current_time = mktime(today); //time_t
 
     int diff = difftime(current_time, enter_time);
+    *ret_diff= diff/60;
 
     int day = diff / (60 * 60 * 24);
     diff = diff - (day * 60 * 60 * 24);
@@ -33,9 +34,8 @@ int calc_diff_min(Car_state *lpcar, int *ret_diff){
     diff = diff - (min * 60);
     
     int sec = diff;
-    printf("%d일 %dh %dm %ds경과.. \n",day, hour, min,sec);
+    // printf("%d일 %dh %dm %ds경과.. \n",day, hour, min,sec);
 
-    *ret_diff= diff/60;
     return 0;
 }
 
@@ -55,7 +55,7 @@ int fee_calculate(Car_state *lpOcar){
     cost=(double)diff_min*cost_pm*coef;
     lpOcar->cost=cost;              //2.정산기능때 저장되는 경우는 쓰레기값임.
 
-    printf("주차요금: %.2f원 \n",cost);
+    printf("(%d분경과)주차요금: %.2f원 \n",diff_min,cost);
     return 0;
 }
 

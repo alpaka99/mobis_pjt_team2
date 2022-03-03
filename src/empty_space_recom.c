@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "../include/empty_space_recom.h"
 #include "../include/enter_exit_manage.h"
+#include <string.h>
 
 int empty_space_recom(Car_state parking_lot[3][3][10])
 {
@@ -49,7 +50,7 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
     visited[f][0][5] = 1;
 
     //0,5가 빈자리일떄
-    if(parking_lot[f][0][5].plate_num == "")
+    if(strcmp(parking_lot[f][0][5].plate_num, "")==0)
     {
       char rr = (char)(0+(int)'A');
       printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, 5);
@@ -72,12 +73,11 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
 
         if (visited[f][nr][nc] == 0) // 방문하지 않은 자리 중에
         { 
-          printf("%d %d %d\n", f, nr, nc);
-          if(parking_lot[f][nr][nc].color == "") // 자리에 차가 없으면
+          if(strcmp(parking_lot[f][nr][nc].plate_num, "")==0) // 자리에 차가 없으면
           {
             char rr = (char)(nr+(int)'A');
-            // printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, nc);
-            printf("%d %c %d\n", f, rr, nc);
+            printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, nc);
+            // printf("%d %c %d\n", f, rr, nc);
             return 0;
           }
           else

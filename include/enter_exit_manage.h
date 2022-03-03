@@ -36,11 +36,15 @@ typedef struct Car_state{
     double cost;
 } Car_state;    //128byte
 
+int detail_until_now_cost(Car_state *lpcar);
 int enter_exit_time(Car_state *car);
 int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num);
 int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num);
 int disp_car_state(Car_state *lpcar);
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
 int exit_time(Car_state *lpcar);
+int until_now_cost(Car_state *lpcar);
+int until_now_calculate(Car_state *lpOcar, double *arg_cost);
+
 
 #endif 

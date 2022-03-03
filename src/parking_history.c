@@ -70,7 +70,7 @@ int parking_history(LPARRAY lp_input_car_Array, LPARRAY lp_output_car_Array){
     printf("현재 입차 내역 : \n\n");
     for(int i=0; i<lp_input_car_Array->size; i++){
         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;
-        disp_car_state(lpcar);
+        detail_until_now_cost(lpcar);
         printf("\n");
     }
     printf("\n\n");

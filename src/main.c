@@ -84,6 +84,7 @@ int main(void){
     }
    
     do{
+        system("clear");
         if(auth==1){
             printf("1. 입출차관리 \n");
             printf("2. 정산기능 \n");
@@ -149,6 +150,7 @@ int main(void){
                 break;
             case 2:
                 // 입차한 car_state의 멤버변수 plate_num를 입력하면 현재까지 발생한 요금이 나오게 함.
+                system("clear");
                 printf("차량번호를 입력하세요.(ex. 111가1111)\n>");
                 char plate_num[15];
                 scanf("%s",plate_num); getchar(); //flush newline
@@ -216,13 +218,14 @@ int main(void){
                             }
                         }
                         else if(sel_pl_num == 2) {
-                            printf("년도를 입력하세요. (ex. 2021)\n");
+                            printf("년도를 입력하세요. (ex. 2022)\n");
                             scanf("%d", &year); getchar();
                             printf("월을 입력하세요. %d년  (ex. 3)\n", year);
                             scanf("%d", &mon); getchar();
-                            printf("일을 입력하세요. %d년 %d월 (ex. 1)\n", year, mon);
+                            printf("일을 입력하세요. %d년 %d월 (ex. 3)\n", year, mon);
                             scanf("%d", &date); getchar();
                         }
+                        system("clear");
                         if(long_term_parking_list(lp_input_car_Array, sel_min, year, mon, date)) {
                             printf("fail to execute long_term_parking_list.\n");
                         }

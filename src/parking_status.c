@@ -71,7 +71,7 @@ int info_car_num(LPARRAY lpArray,char *car_num, int *flag)
     arrayGetAt(lpArray,i,(LPDATA*) &tmp);
     if (strcmp(tmp->plate_num, car_num)==0) 
     {
-      disp_car_state(tmp);
+      until_now_cost(tmp);
       *flag=0;
       return 0;
     }
@@ -93,7 +93,7 @@ int info_car_loc(LPARRAY lpArray, char *car_loc, int *flag, int str_size)
       col = (int)car_loc[5]-(int)'0'-1;
       
       if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){ 
-        disp_car_state(tmp);
+        until_now_cost(tmp);
         *flag=0;
         return 0;
       }
@@ -125,6 +125,7 @@ int parking_check(LPARRAY lpArray)
       case 1:
         printf("차량 번호를 입력하세요.(ex. 111가1111)\n");
         inputline(stdin, &car_num, &str_size);
+        system("clear");
         cErr = info_car_num(lpArray, car_num, &flag);
         if(cErr){
             printf("해당 자동차는 주차장에 없습니다.\n");
@@ -139,6 +140,7 @@ int parking_check(LPARRAY lpArray)
       case 2:
         printf("주차 위치를 입력하세요.(ex. B1-3-3)");
         inputline(stdin, &car_loc, &str_size);
+        system("clear");
         cErr = info_car_loc(lpArray, car_loc, &flag, str_size);
         if(cErr){
             printf("해당 자동차는 주차장에 없습니다.\n");
