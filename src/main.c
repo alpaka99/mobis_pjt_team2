@@ -32,13 +32,14 @@ int main(void){
 
     // 사용자 권한 선택
     system("clear"); 
-    printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");
+    printf("사용자 권한을 선택하세요.(0: 종료 1:Admin 2:User)\n>");
     int auth;
     while(1){
         char c;
         c=getchar(); clear_buffer();
         auth=(int)c-'0'; 
-        if(auth!=1 && auth!=2){
+        if(auth==0) return 0;
+        else if(auth!=1 && auth!=2){
             printf("잘못 입력했습니다. \n");
             continue;
         }

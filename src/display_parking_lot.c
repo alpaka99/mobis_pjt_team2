@@ -65,9 +65,9 @@ int display_parking_lot(LPARRAY lp_IArray, LPARRAY lp_OArray){
             printf("\u2501");
         }      
         printf("\u2513\n    \u2503");  
-        printf("\t\t\t\t\t   ┌─────────────────────────┐\n");
-        printf("\t\t\t\t\t   │       모비스 주차장     │\n");
-        printf("\t\t\t\t\t   └─────────────────────────┘\n");
+        printf("\t\t\t\t\t┌─────────────────┐\t\t       ┌────────────────────────┐\n");
+        printf("\t\t\t\t\t│   지상 출입문   │\t\t       │    MOBIS 주차장 입구   │\n");
+        printf("\t\t\t\t\t└─────────────────┘\t\t       └────────────────────────┘\n");
         for(int j=0;j<3;j++){
             char r = (char)(j+(int)'A');
             printf("    ");
