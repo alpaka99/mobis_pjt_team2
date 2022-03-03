@@ -10,6 +10,8 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
   int *rPtr = &r;
   int *cPtr = &c;
   int i=0;
+  struct Queue q;
+  struct Queue *qPtr = &q;
 
   int visited[3][3][10] = {0,};
 
@@ -29,18 +31,22 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
       printf("옳지 않은 층입니다.\n");
       continue;
     }
+    printf("floor %d\n", f);
 
     // delta를 사용해서 탐색
     // W, SW, S, SE, E, NE, N, NW
     int dr[8] = {0, 1, 1, 1, 0, -1, -1, -1};
-    int dc[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+    int dc[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
+
+
+// 여기까지 괜춘
 
     // Queue를 이용한 bfs
-    struct Queue q;
-    struct Queue *qPtr;
+    
     init_queue(qPtr); // queue 초기화
 
     enqueue(qPtr,0,5); // 직원용 출입구는 각 층의 [0][5]와 가장 가깝다고 가정
+    visited[f][0][5] = 1;
 
     //0,5가 빈자리일떄
     if(parking_lot[f][0][5].plate_num == "")
@@ -54,25 +60,29 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
       //해당 자리 주변을 둘러봄
       dequeue(qPtr, rPtr, cPtr);
 
-      for(i=0;i<7;i++){
+      for(i=0;i<8;i++){
         nr = r+dr[i];
         nc = c+dc[i];
         
-        
-        if(! (0<nr && nr<3 && 0<nc && nc<10)){ // 범위를 벗어나면
+        // printf("%d %d %d : ", f, nr, nc);
+        if((0<=nr && nr<=2 && 0<=nc && nc<=9) == 0){ // 범위를 벗어나면
+          // printf("CCCCC %d %d\n", nr, nc);
           continue; // next iteration 
         }
 
         if (visited[f][nr][nc] == 0) // 방문하지 않은 자리 중에
         { 
-          if(parking_lot[f][nr][nc].color == "\0") // 자리에 차가 없으면
+          printf("%d %d %d\n", f, nr, nc);
+          if(parking_lot[f][nr][nc].color == "") // 자리에 차가 없으면
           {
             char rr = (char)(nr+(int)'A');
-            printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, nc);
+            // printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, nc);
+            printf("%d %c %d\n", f, rr, nc);
             return 0;
           }
           else
           {
+            // printf("%d %d\n", nr, nc);
             enqueue(qPtr, nr, nc); // queue에 넣고 다음 기준점으로 삼기
             visited[f][nr][nc] = 1;
           }
@@ -87,7 +97,7 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
   return 1;
 }
 
-int init_queue(struct Queue *queue)
+void init_queue(struct Queue *queue)
 {
   queue->head = queue->tail = NULL;
   queue->size = 0;
@@ -101,41 +111,41 @@ int isEmpty(struct Queue *queue)
     return 0;
 }
 
-int enqueue(struct Queue *queue, int r, int c)
+void enqueue(struct Queue *queue, int r, int c)
 {
   Node *newNode = (Node*)malloc(sizeof(Node)); // 새로운 노드 동적생성
 
   newNode->r = r;
   newNode->c = c;
 
+  newNode->nxt = NULL;
+
   if(isEmpty(queue)) // 비어있을때
   {
     queue->head = newNode; // 맨앞을 newNode로 설정
   }
+  else // queue가 안비었을떄
+  {
+    queue->tail->nxt = newNode; //현재 맨 뒤의 다음을 newNode로 설정
+  }
 
-  queue->tail = newNode;
+  queue->tail = newNode; // 현재 맨 뒤를 한칸 뒤로 (nowNode로) 옮김
   queue->size++;
 }
 
-int dequeue(struct Queue *queue, int *rPtr, int *cPtr)
+void dequeue(struct Queue *queue, int *rPtr, int *cPtr)
 {
-  int r;
-  int c;
-
-  Node *ptr;
-  if(isEmpty(queue))
-  {
-    printf("Empty queue dequeue Error");
-      return 1;
-  }
-
-  ptr = queue->head; // 정보 추출
-  *rPtr = ptr->r;
-  *cPtr = ptr->c;
-  queue->head = ptr->nxt; // queue의 맨 앞을 다음 노드로 이동
-  free(ptr);
-  queue->size--;
-
-  return 0;
+    Node *ptr;
+    if(isEmpty(queue))
+    {
+      printf("Empty queue dequeue Error");
+      return;
+    }
+    ptr = queue->head; // 정보 추출
+    *rPtr = ptr->r;
+    *cPtr = ptr->c;
+    queue->head = ptr->nxt; // queue의 맨 앞을 다음 노드로 이동
+    free(ptr);
+    queue->size--;
 
 }
