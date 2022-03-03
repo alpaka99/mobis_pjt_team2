@@ -8,13 +8,68 @@
 #include "fee_calculate.h"
 #include "save_load.h"
 
+int detail_until_now_cost(Car_state *lpcar){
+    //주차위치, 차량번호, 전화번호, 입차시각, 현재까지 발생한 주차 요금.
+    double cost;
+    if (until_now_calculate(lpcar,&cost)){
+        printf("fail to execute until_now_calculate.\n");
+        return 1;
+    }
+    printf("차량정보:(%s,%s,%s), 주차위치:(%s,%d,%d), 현재까지 발생된 주차요금:%.2f원, 인적사항:(%d동, %s)\n입차시각:(%d.%d.%d %dh:%dm:%ds), 출차시각:(%d.%d.%d %dh:%dm:%ds)\n",\
+    lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
+    cost, lpcar->person.dong, lpcar->person.contac_num,\
+    lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+    lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second); 
+    return 0;
+}
+
 int disp_car_state(Car_state *lpcar){
-    printf("차량정보:(%s,%s,%s), 주차위치:(%s,%d,%d), 주차요금:%f원, 인적사항:(%d동, %s)\n입차시각:(%d.%d.%d %dh:%dm:%ds), 출차시각:(%d.%d.%d %dh:%dm:%ds)\n",\
+
+    printf("차량정보:(%s,%s,%s), 주차위치:(%s,%d,%d), 주차요금:%.2f원, 인적사항:(%d동, %s)\n입차시각:(%d.%d.%d %dh:%dm:%ds), 출차시각:(%d.%d.%d %dh:%dm:%ds)\n",\
     lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
     lpcar->cost, lpcar->person.dong, lpcar->person.contac_num,\
     lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
     lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second); 
+
+    return 0;
 }
+
+int until_now_calculate(Car_state *lpOcar, double *arg_cost){
+    int diff_min;
+    if( calc_diff_min(lpOcar,&diff_min) ){ 
+        printf("fail to execute carc_diff_min.\n");
+        return 1;  
+    }  
+    double coef,cost,cost_pm;
+    cost_pm=100; 
+    if(lpOcar->person.dong==0){     //임직원 아닌 경우
+        coef=1;
+    }else{                          //임직원인 경우
+        coef=0.5;
+    }
+    cost=(double)diff_min*cost_pm*coef;
+    *arg_cost=cost;              
+
+    return 0;
+}
+
+int until_now_cost(Car_state *lpcar){
+    //주차위치, 차량번호, 전화번호, 입차시각, 현재까지 발생한 주차 요금.
+    double cost;
+    if (until_now_calculate(lpcar,&cost)){
+        printf("fail to execute until_now_calculate.\n");
+        return 1;
+    }
+    printf("[%s,%d,%d](%s) H.P:%s 입차시각:(%d.%d.%d %dh:%dm:%ds), 현재까지 발생한 주차요금은 %.2f원입니다.\n",\
+    lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1, lpcar->plate_num,\
+    lpcar->person.contac_num, \
+    lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\
+    cost);
+
+    return 0;
+}
+
+
 int save(LPARRAY lpiArray, LPARRAY lpoArray){
     input_car_save(lpiArray);
     output_car_save(lpoArray);

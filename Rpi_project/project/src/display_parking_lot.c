@@ -13,11 +13,11 @@ int init_parking_lot(){
 
     Time now;
     Car_state tmp_car={ "", "", "", {"",0,0}, now, now, {0,""},0.0 };
-    // parking_lot 초기화
+
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             for(int k=0;k<10;k++){
-                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); //깊은 복사
+                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); 
             }
         }
     }
@@ -29,7 +29,7 @@ int display_parking_lot(LPARRAY lp_IArray, LPARRAY lp_OArray){
     Car_state* tmp;         
     int floor, num_B1=0, num_B2=0, num_B3=0;   
 
-    // 주차장 mapping
+    // ??? mapping
     for(int i=0;i<lp_IArray->size;i++){
         if(arrayGetAt(lp_IArray, i, (LPDATA*) &tmp)) return 1;
         
@@ -65,9 +65,9 @@ int display_parking_lot(LPARRAY lp_IArray, LPARRAY lp_OArray){
             printf("\u2501");
         }      
         printf("\u2513\n    \u2503");  
-        printf("\t\t\t\t\t   ┌─────────────────────────┐\n");
-        printf("\t\t\t\t\t   │       모비스 주차장     │\n");
-        printf("\t\t\t\t\t   └─────────────────────────┘\n");
+        printf("\t\t\t\t\t┌─────────────────┐\t\t       ┌────────────────────────┐\n");
+        printf("\t\t\t\t\t│   지상 출입문   │\t\t       │    MOBIS 주차장 입구   │\n");
+        printf("\t\t\t\t\t└─────────────────┘\t\t       └────────────────────────┘\n");
         for(int j=0;j<3;j++){
             char r = (char)(j+(int)'A');
             printf("    ");

@@ -1,4 +1,4 @@
-SRCS= main.c car_positioning.c fee_calculate.c enter_exit_manage.c long_term_parking_list.c parking_history.c save_load.c display_parking_lot.c parking_status.c
+SRCS= main.c car_positioning.c fee_calculate.c enter_exit_manage.c long_term_parking_list.c parking_history.c save_load.c display_parking_lot.c parking_status.c empty_space_recom.c
 OBJS= $(SRCS:.c=.o)
 INCPATH= ../include
 LIBPATH= ../lib
