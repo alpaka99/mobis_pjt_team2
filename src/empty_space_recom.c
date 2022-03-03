@@ -20,9 +20,9 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
   while(1)
   {
     printf("주차하고 싶은 층을 입력해주세요.(0: 이전으로, 1: B1, 2: B2, 3:B3)\n");
-    char c;
-    c=getchar(); clear_buffer();
-    f=(int)c-'0'; 
+    char ch;
+    ch=getchar(); clear_buffer();
+    f=(int)ch-'0'; 
 
     // 탈출 및 예외처리
     if(f == 0){
@@ -66,7 +66,6 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
         nr = r+dr[i];
         nc = c+dc[i];
         
-        printf("%d %d %d : ", f, nr, nc);
         if((0<=nr && nr<=2 && 0<=nc && nc<=9) == 0){ // 범위를 벗어나면
           // printf("CCCCC %d %d\n", nr, nc);
           continue; // next iteration 
@@ -77,7 +76,7 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
           if(strcmp(parking_lot[f][nr][nc].plate_num, "")==0) // 자리에 차가 없으면
           {
             char rr = (char)(nr+(int)'A');
-            printf("지하 %d층의 추천 자리는 %c%d입니다.\n", f+1, rr+1, nc+1);
+            printf("지하 %d층의 추천 자리는 %c%d입니다.\n", f+1, rr, nc+1);
             // printf("%d %c %d\n", f, rr, nc);
             return 0;
           }
