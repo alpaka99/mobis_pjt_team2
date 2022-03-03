@@ -1,4 +1,4 @@
-// 안쓰는 함수
+#include "../include/enter_exit_manage.h"
 typedef struct Node{
   int r;
   int c;
@@ -12,7 +12,7 @@ typedef struct Queue{
   int size;
 }queue;
 
-int empty_space_recom(Car_state parking_lot[3][3][10]);
+int empty_space_recom(struct Car_state parking_lot[3][3][10]);
 int init_queue(struct Queue *queue);
 int isEmpty(struct Queue *queue);
 int enqueue(struct Queue *queue, int r, int c);
