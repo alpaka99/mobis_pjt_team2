@@ -5,7 +5,7 @@
 
 int car_set_save(Car_state *lpcar, int size){
     FILE *fwp;
-    if((fwp=fopen("../dat/car_set.dat","wb"))==NULL){
+    if((fwp=fopen("./dat/car_set.dat","wb"))==NULL){
         printf("fail to open car_set.dat\n");
         return 1;
     }
@@ -22,7 +22,7 @@ int car_set_load(LPARRAY lpArray){
     FILE *frp;
     Car_state *res;
    
-    if((frp=fopen("../dat/car_set.dat","rb"))==NULL){
+    if((frp=fopen("./dat/car_set.dat","rb"))==NULL){
         printf("fail to open car_set.dat\n");
         return 1;
     }    
@@ -44,8 +44,8 @@ int car_set_load_csv(LPARRAY lpArray){
     char str_tmp[1024];
     char *tkn;
     int cnt;
-    if((pFile=fopen("car_set.csv","r"))==NULL){
-        printf("fail to open car_set.dat\n");
+    if((pFile=fopen("./dat/car_set.csv","r"))==NULL){
+        printf("fail to open car_set.csv\n");
         return 1;
     }      
     while( !feof( pFile ) ){
@@ -135,7 +135,7 @@ int input_car_save(LPARRAY lpArray){
     FILE *fwp;
     Car_state *res;
     
-    if((fwp=fopen("../dat/iparking_state.dat","wb"))==NULL){
+    if((fwp=fopen("./dat/iparking_state.dat","wb"))==NULL){
         printf("fail to open iparking_state.dat\n");
         return 1;
     }
@@ -152,7 +152,7 @@ int input_car_load(LPARRAY lpArray){
     FILE *frp;
     Car_state *res;
    
-    if((frp=fopen("../dat/iparking_state.dat","rb"))==NULL){
+    if((frp=fopen("./dat/iparking_state.dat","rb"))==NULL){
         printf("fail to open iparking_state.dat\n");
         return 1;
     }
@@ -174,7 +174,7 @@ int output_car_save(LPARRAY lpArray){
     FILE *fwp;
     Car_state *res;
     
-    if((fwp=fopen("../dat/oparking_state.dat","wb"))==NULL){
+    if((fwp=fopen("./dat/oparking_state.dat","wb"))==NULL){
         printf("fail to open oparking_state.dat\n");
         return 1;
     }
@@ -192,7 +192,7 @@ int output_car_load(LPARRAY lpArray){
     FILE *frp;
     Car_state *res;
    
-    if((frp=fopen("../dat/oparking_state.dat","rb"))==NULL){
+    if((frp=fopen("./dat/oparking_state.dat","rb"))==NULL){
         printf("fail to open oparking_state.dat\n");
         return 1;
     }
