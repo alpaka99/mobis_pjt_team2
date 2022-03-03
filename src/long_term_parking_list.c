@@ -16,8 +16,8 @@ int time_calc(Car_state *lpcar, int sel_date, int year, int mon, int date)
         year = lpcar->enter_now.year;
         mon = lpcar->enter_now.month;
         date = lpcar->enter_now.day;
-        printf("%d %d %d\n",year, mon, date);
     }
+    
         user_stime.tm_year   = year-1900;   // 주의 :년도는 1900년부터 시작
         user_stime.tm_mon    = mon-1;      // 주의 :월은 0부터 시작
         user_stime.tm_mday   = date;
