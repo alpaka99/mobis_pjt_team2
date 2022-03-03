@@ -1,5 +1,5 @@
-#include "display_parking_lot.h"
-#include "enter_exit_manage.h"
+#include "../include/display_parking_lot.h"
+#include "../include/enter_exit_manage.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -104,8 +104,6 @@ int display_parking_lot(LPARRAY lp_IArray){
               char *ptr = strtok(str, " ");
               printf("¦¢  %s ¦¢",ptr);
             }
-                }      
-            }
           }printf("\n");
 
           for(int k=0;k<10;k++)
@@ -119,8 +117,6 @@ int display_parking_lot(LPARRAY lp_IArray){
               char *ptr = strtok(str, " ");
               ptr = strtok(NULL,"\0");
               printf("¦¢  %s  ¦¢", ptr);
-            }
-                }      
             }
           }printf("\n");
           
