@@ -10,6 +10,7 @@
         "parking_status.h": "c",
         "fee_calculate.h": "c",
         "array.h": "c",
-        "parking_history.h": "c"
+        "parking_history.h": "c",
+        "cmath": "c"
     }
 }

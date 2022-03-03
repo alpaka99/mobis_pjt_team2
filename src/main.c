@@ -158,7 +158,7 @@ int main(void){
                 break;
             case 4:
                 if(auth==1){
-                    parking_check(lp_input_car_Array); //@
+                    parking_check(lp_input_car_Array); 
                 }else{
                     printf("접근 불가합니다.\n");
                 }

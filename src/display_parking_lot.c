@@ -50,7 +50,7 @@ int display_parking_lot(LPARRAY lp_IArray){
         }
         parking_lot[floor][tmp->location.row][tmp->location.col] = *tmp;
     }
-    // UI
+    // UI  @
     // unicode 참고: https://unicode-table.com/kr/blocks/box-drawing/
     printf("\n\n    전체 주차대수: %d/30", lp_IArray->size);
     for(int i=0; i<71; i++) printf(" ");
