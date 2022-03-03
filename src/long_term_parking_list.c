@@ -4,7 +4,7 @@
 #include "enter_exit_manage.h"
 #include <time.h>
 
-int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int date)
+int time_calc(Car_state *lpcar, int sel_date, int year, int mon, int date)
 {
     time_t     tm_st, tm_st2;
     time_t     tm_nd;
@@ -65,13 +65,11 @@ int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d
 int long_term_parking_list(LPARRAY lpArray, int sel_date, int year, int mon, int date){
     int nErr = ERR_ARRAY_OK;
     Car_state *lpcar;
-    Time now;
-    // now_time(&now);
     int size = arraySize(lpArray);
     for(int i = 0; i < size; i++){
     nErr = arrayGetAt(lpArray, i, (LPDATA*) &lpcar);
     if (ERR_ARRAY_OK != nErr) return 1;
-    time_calc(lpcar, now, sel_date, year, mon, date);
+    time_calc(lpcar, sel_date, year, mon, date);
     }
     return 0;
 }
