@@ -26,6 +26,5 @@ int car_positioning(Car_state *car){
     if(strcmp(car->location.floor,"B2")==0) flr =1;
     if(strcmp(car->location.floor,"B3")==0) flr =2;
     parking_lot[flr][car->location.row][car->location.col]=*car;
-
     return 0;
 }

@@ -27,7 +27,7 @@ int main(void){
     if(output_car_load(lp_output_car_Array)) return 1;
 
     init_parking_lot();
-    display_parking_lot(lp_input_car_Array); //@
+    display_parking_lot(lp_input_car_Array);
 
     // 사용자 권한 선택
     system("clear"); 

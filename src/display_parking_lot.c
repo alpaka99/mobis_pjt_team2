@@ -25,7 +25,7 @@ int init_parking_lot(){
 }
 int display_parking_lot(LPARRAY lp_IArray){
     extern Car_state parking_lot[3][3][10];
-
+    
     system("clear");
     printf("\n\n====================================================주차현황====================================================");
 
