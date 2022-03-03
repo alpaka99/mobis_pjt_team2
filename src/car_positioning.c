@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
+extern Car_state parking_lot[3][3][10];
+
 int car_positioning(Car_state *car){
     // 주차 위치 결정
     // 임의결정 or 가까운 빈공간 추천 중 선택
@@ -25,6 +27,12 @@ int car_positioning(Car_state *car){
     if(strcmp(car->location.floor,"B1")==0) flr =0;
     if(strcmp(car->location.floor,"B2")==0) flr =1;
     if(strcmp(car->location.floor,"B3")==0) flr =2;
+    
+    //같은 위치에 차량이 존재한다면 
+    if(strcmp(parking_lot[flr][car->location.row][car->location.col].plate_num,"")!=0){ 
+        return 1;
+    }
     parking_lot[flr][car->location.row][car->location.col]=*car;
+            
     return 0;
 }
