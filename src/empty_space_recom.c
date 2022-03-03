@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "../include/empty_space_recom.h"
 #include "../include/enter_exit_manage.h"
 
@@ -31,8 +32,8 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
 
     // delta를 사용해서 탐색
     // W, SW, S, SE, E, NE, N, NW
-    int dr[7] = {-1, -1, 0, 1, 1, 1, 0, -1};
-    int dc[7] = {0, 1, 1, 1, 0, -1, -1, -1};
+    int dr[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+    int dc[8] = {0, 1, 1, 1, 0, -1, -1, -1};
 
     // Queue를 이용한 bfs
     struct Queue q;
