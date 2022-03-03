@@ -65,7 +65,7 @@ int main(void){
     //     disp_car_state(lpcar);
     // }
     // printf("==============\n");
-    // //test @
+    // //test 
 
     if(auth==1){
         char passwd[]="0000";
