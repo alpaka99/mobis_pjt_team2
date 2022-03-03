@@ -13,11 +13,11 @@ int init_parking_lot(){
 
     Time now;
     Car_state tmp_car={ "", "", "", {"",0,0}, now, now, {0,""},0.0 };
-    // parking_lot ???
+
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             for(int k=0;k<10;k++){
-                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); //?? ??
+                memcpy(&parking_lot[i][j][k], &tmp_car, sizeof(tmp_car)); 
             }
         }
     }

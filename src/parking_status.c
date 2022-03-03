@@ -4,6 +4,7 @@
 #include "array.h"
 #include "enter_exit_manage.h"
 #include "parking_status.h"
+#include "display_parking_lot.h"
 
 extern Car_state parking_lot[3][3][10];
 
@@ -115,22 +116,28 @@ int parking_check(LPARRAY lpArray)
   int str_size;
   while(flag)
   {
-    printf("-1: 이전으로, 1: 차량번호를 입력, 2: 위치 입력\n");
+    printf("입력할 정보를 선택하세요.(-1: 이전으로, 1: 차량번호, 2: 위치)\n");
     char sel[5];
     scanf("%s",&sel); getchar(); //flush newline
     parking_check_key=atoi(sel); 
 
     switch(parking_check_key){
       case 1:
-        printf("차량 번호를 형식에 맞게 입력해주세요(예시: 111가1111)");
+        printf("차량 번호를 입력하세요.(ex. 111가1111)\n");
         inputline(stdin, &car_num, &str_size);
         cErr = info_car_num(lpArray, car_num, &flag);
         if(cErr){
             printf("해당 자동차는 주차장에 없습니다.\n");
         }
+        printf("(다음: 아무거나입력)");
+        system("stty -echo");
+        char sel;
+        sel=getchar(); clear_buffer();
+        system("stty echo");
+        system("clear");
         break;
       case 2:
-        printf("위치를 형식에 맞게 입력해주세요(예시: B1-3-3)");
+        printf("주차 위치를 입력하세요.(ex. B1-3-3)");
         inputline(stdin, &car_loc, &str_size);
         cErr = info_car_loc(lpArray, car_loc, &flag, str_size);
         if(cErr){

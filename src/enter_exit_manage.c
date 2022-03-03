@@ -9,7 +9,11 @@
 #include "save_load.h"
 
 int disp_car_state(Car_state *lpcar){
-    printf("차량정보:(%s,%s,%s), 주차위치:(%s,%d,%d), 주차요금:%f원, 인적사항:(%d동, %s)\n입차시각:(%d.%d.%d %dh:%dm:%ds), 출차시각:(%d.%d.%d %dh:%dm:%ds)\n",\
+    if(exit_time(lpcar)){ //출차시간 갱신
+        printf("fail to execute exit_time.\n");
+        return 1;   
+    }
+    printf("차량정보:(%s,%s,%s), 주차위치:(%s,%d,%d), 주차요금:%.2f원, 인적사항:(%d동, %s)\n입차시각:(%d.%d.%d %dh:%dm:%ds), 출차시각:(%d.%d.%d %dh:%dm:%ds)\n",\
     lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\
     lpcar->cost, lpcar->person.dong, lpcar->person.contac_num,\
     lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\

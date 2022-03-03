@@ -18,6 +18,7 @@
 				"${fileDirname}\\save_load.c",
 				"${fileDirname}\\display_parking_lot.c",
 				"${fileDirname}\\parking_status.c",
+				"${fileDirname}\\empty_space_recom.c",
 				"-I",
 				"../include",
 				"-o",

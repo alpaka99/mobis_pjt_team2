@@ -1,0 +1,739 @@
+warning: LF will be replaced by CRLF in Rpi_project/project/makefile.
+The file will have its original line endings in your working directory
+[1mdiff --git a/.vscode/tasks.json b/.vscode/tasks.json[m
+[1mindex ec2c5b6..5aefc7e 100644[m
+[1m--- a/.vscode/tasks.json[m
+[1m+++ b/.vscode/tasks.json[m
+[36m@@ -18,6 +18,7 @@[m
+ 				"${fileDirname}\\save_load.c",[m
+ 				"${fileDirname}\\display_parking_lot.c",[m
+ 				"${fileDirname}\\parking_status.c",[m
+[32m+[m				[32m"${fileDirname}\\empty_space_recom.c",[m
+ 				"-I",[m
+ 				"../include",[m
+ 				"-o",[m
+[1mdiff --git a/README.md b/README.md[m
+[1mindex cf0e7a2..37169e6 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -6,5 +6,8 @@[m [mcd [파일설치경로]/project/[m
+ make[m
+ ./main[m
+ [m
+[32m+[m[32madmin권한 비밀번호:[m
+[32m+[m[32m0000[m
+[32m+[m
+ 입차 및 출차 내역 초기화:[m
+ ./init.sh[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpi_project/project/dat/oparking_state.dat b/Rpi_project/project/dat/oparking_state.dat[m
+[1mindex e69de29..69b4b53 100644[m
+Binary files a/Rpi_project/project/dat/oparking_state.dat and b/Rpi_project/project/dat/oparking_state.dat differ
+[1mdiff --git a/Rpi_project/project/include/display_parking_lot.h b/Rpi_project/project/include/display_parking_lot.h[m
+[1mindex e6919bb..503e4e6 100644[m
+[1m--- a/Rpi_project/project/include/display_parking_lot.h[m
+[1m+++ b/Rpi_project/project/include/display_parking_lot.h[m
+[36m@@ -4,6 +4,6 @@[m
+ [m
+ int clear_buffer(void);[m
+ int init_parking_lot();[m
+[31m-int display_parking_lot(LPARRAY lp_IArray);[m
+[32m+[m[32mint display_parking_lot(LPARRAY lp_IArray, LPARRAY lp_OArray);[m
+ [m
+ #endif[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpi_project/project/include/parking_status.h b/Rpi_project/project/include/parking_status.h[m
+[1mindex fe9a634..fe8c57f 100644[m
+[1m--- a/Rpi_project/project/include/parking_status.h[m
+[1m+++ b/Rpi_project/project/include/parking_status.h[m
+[36m@@ -5,10 +5,10 @@[m
+ #include <stdio.h>[m
+ #include "enter_exit_manage.h"[m
+ [m
+[31m-int parking_status_check(LPARRAY lpArray, Car_state parking_lot[3][10][10]);[m
+[31m-int inputline(FILE* fp, char** str);[m
+[32m+[m[32mint parking_status_check(LPARRAY lpArray);[m
+[32m+[m[32mint inputline(FILE* fp, char** str, int *str_size);[m
+ int info_car_num(LPARRAY lpArray,char *car_num, int *flag);[m
+[31m-int info_car_loc(LPARRAY lpArray, char* car_loc, int *flag);[m
+[32m+[m[32mint info_car_loc(LPARRAY lpArray, char *car_loc, int *flag, int str_size);[m
+ int parking_check(LPARRAY lpArray);[m
+ [m
+ #endif[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpi_project/project/main b/Rpi_project/project/main[m
+[1mindex 10a7320..3b2fa28 100644[m
+Binary files a/Rpi_project/project/main and b/Rpi_project/project/main differ
+[1mdiff --git a/Rpi_project/project/makefile b/Rpi_project/project/makefile[m
+[1mindex d0671f1..551c3f6 100644[m
+[1m--- a/Rpi_project/project/makefile[m
+[1m+++ b/Rpi_project/project/makefile[m
+[36m@@ -1,4 +1,5 @@[m
+ all:[m
+[32m+[m	[32m./init.sh[m
+ 	cd src; make[m
+ clean:[m
+ 	cd src; make clean[m
+[1mdiff --git a/Rpi_project/project/src/car_positioning.c b/Rpi_project/project/src/car_positioning.c[m
+[1mindex a2afcb2..d246260 100644[m
+[1m--- a/Rpi_project/project/src/car_positioning.c[m
+[1m+++ b/Rpi_project/project/src/car_positioning.c[m
+[36m@@ -2,6 +2,8 @@[m
+ #include <stdio.h>[m
+ #include <string.h>[m
+ [m
+[32m+[m[32mextern Car_state parking_lot[3][3][10];[m
+[32m+[m
+ int car_positioning(Car_state *car){[m
+     // 주차 위치 결정[m
+     // 임의결정 or 가까운 빈공간 추천 중 선택[m
+[36m@@ -25,7 +27,12 @@[m [mint car_positioning(Car_state *car){[m
+     if(strcmp(car->location.floor,"B1")==0) flr =0;[m
+     if(strcmp(car->location.floor,"B2")==0) flr =1;[m
+     if(strcmp(car->location.floor,"B3")==0) flr =2;[m
+[32m+[m[41m    [m
+[32m+[m[32m    //같은 위치에 차량이 존재한다면[m[41m [m
+[32m+[m[32m    if(strcmp(parking_lot[flr][car->location.row][car->location.col].plate_num,"")!=0){[m[41m [m
+[32m+[m[32m        return 1;[m
+[32m+[m[32m    }[m
+     parking_lot[flr][car->location.row][car->location.col]=*car;[m
+[31m-[m
+[32m+[m[41m            [m
+     return 0;[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpi_project/project/src/car_positioning.o b/Rpi_project/project/src/car_positioning.o[m
+[1mindex 4e8c7c1..b2bd684 100644[m
+Binary files a/Rpi_project/project/src/car_positioning.o and b/Rpi_project/project/src/car_positioning.o differ
+[1mdiff --git a/Rpi_project/project/src/display_parking_lot.c b/Rpi_project/project/src/display_parking_lot.c[m
+[1mindex 8c164e0..5504504 100644[m
+[1m--- a/Rpi_project/project/src/display_parking_lot.c[m
+[1m+++ b/Rpi_project/project/src/display_parking_lot.c[m
+[36m@@ -23,12 +23,9 @@[m [mint init_parking_lot(){[m
+     }[m
+     return 0;[m
+ }[m
+[31m-int display_parking_lot(LPARRAY lp_IArray){[m
+[32m+[m[32mint display_parking_lot(LPARRAY lp_IArray, LPARRAY lp_OArray){[m
+     extern Car_state parking_lot[3][3][10];[m
+[31m-[m
+[31m-    system("clear");[m
+[31m-    printf("\n\n====================================================주차현황====================================================");[m
+[31m-[m
+[32m+[m[41m    [m
+     Car_state* tmp;         [m
+     int floor, num_B1=0, num_B2=0, num_B3=0;   [m
+ [m
+[36m@@ -50,15 +47,16 @@[m [mint display_parking_lot(LPARRAY lp_IArray){[m
+         }[m
+         parking_lot[floor][tmp->location.row][tmp->location.col] = *tmp;[m
+     }[m
+[31m-    // UI  @[m
+[31m-    // unicode 참고: https://unicode-table.com/kr/blocks/box-drawing/[m
+[31m-    printf("\n\n    전체 주차대수: %d/30", lp_IArray->size);[m
+[31m-    for(int i=0; i<71; i++) printf(" ");[m
+[31m-    printf("0 : 종료\n");[m
+[31m-    for(int i=0; i<84; i++) printf(" ");[m
+[31m-    printf("아무거나입력: 다음으로\n");[m
+[31m-[m
+[32m+[m[41m    [m
+     for(int i=0;i<3;i++){[m
+[32m+[m[32m        // unicode 참고: https://unicode-table.com/kr/blocks/box-drawing/[m
+[32m+[m[32m        system("clear");[m
+[32m+[m[32m        printf("\n\n====================================================주차현황====================================================");[m
+[32m+[m[32m        printf("\n\n    전체 주차대수: %d/30", lp_IArray->size);[m
+[32m+[m[32m        for(int i=0; i<71; i++) printf(" ");[m
+[32m+[m[32m        printf("0 : 종료\n");[m
+[32m+[m[32m        for(int i=0; i<84; i++) printf(" ");[m
+[32m+[m[32m        printf("아무거나입력: 다음으로\n");[m
+         if(i==0) printf("\n\n    지하 1 층 주차대수: %d/10\n",num_B1);[m
+         else if(i==1) printf("\n\n    지하 2 층 주차대수: %d/10\n",num_B2);[m
+         else if(i==2) printf("\n\n    지하 3 층 주차대수: %d/10\n",num_B3);[m
+[36m@@ -67,31 +65,63 @@[m [mint display_parking_lot(LPARRAY lp_IArray){[m
+             printf("\u2501");[m
+         }      [m
+         printf("\u2513\n    \u2503");  [m
+[32m+[m[32m        printf("\t\t\t\t\t   ┌─────────────────────────┐\n");[m
+[32m+[m[32m        printf("\t\t\t\t\t   │       모비스 주차장     │\n");[m
+[32m+[m[32m        printf("\t\t\t\t\t   └─────────────────────────┘\n");[m
+         for(int j=0;j<3;j++){[m
+[31m-            for(int k=0;k<10*3;k++){[m
+[31m-                if(0<=k && k<10){[m
+[31m-                    printf("%9s\u2503", "");[m
+[31m-                }else if(10<=k && k<20){[m
+[31m-                    printf("%9s\u2503", parking_lot[i][j][k-10].plate_num); [m
+[31m-                }else{[m
+[31m-                    printf("%9s\u2503", "");[m
+[31m-                }[m
+[31m-                if(k==9 || k==19) printf("\n    \u2503");[m
+[32m+[m[32m            char r = (char)(j+(int)'A');[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++){[m
+[32m+[m[32m            printf("┌────────┐");[m
+[32m+[m[32m            }printf("\n");[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++)[m
+[32m+[m[32m            {[m
+[32m+[m[32m                if(k==9)    printf("│   %c%d  │", r,k+1);[m
+[32m+[m[32m                else printf("│   %c%d   │", r,k+1); // 좌표출력[m
+[32m+[m[32m            }printf("\n");[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++){[m
+[32m+[m[32m            printf("├────────┤");[m
+[32m+[m[32m            }printf("\n");[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++){[m
+[32m+[m[32m            printf("│        │");[m
+[32m+[m[32m            }printf("\n");[m
+[32m+[m
+[32m+[m[32m            // 번호판 출력 시작[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++)[m
+[32m+[m[32m            {[m
+[32m+[m[32m            if(strcmp(parking_lot[i][j][k].plate_num,"")==0){[m
+[32m+[m[32m                printf("│        │");[m
+[32m+[m[32m            }[m
+[32m+[m[32m            else{[m
+[32m+[m[32m                char str[20]="";[m
+[32m+[m[32m                strncpy(str, parking_lot[i][j][k].plate_num,6);  // UTF-8에서 한글: 3byte[m
+[32m+[m[32m                str[6]='\0';[m
+[32m+[m[32m                printf("│  %s │",str);[m
+             }[m
+[31m-            if(j!=2){[m
+[31m-                printf("\n    \u2523");[m
+[31m-                for(int z=0; z<99; z++){[m
+[31m-                    printf("\u2501");[m
+[31m-                }      [m
+[31m-                printf("\u252b\n    \u2503"); [m
+[32m+[m[32m            }printf("\n");[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++)[m
+[32m+[m[32m            {[m
+[32m+[m[32m            if(strcmp(parking_lot[i][j][k].plate_num,"")==0){[m
+[32m+[m[32m                printf("│        │");[m
+             }[m
+             else{[m
+[31m-                printf("\n    \u2517");[m
+[31m-                for(int z=0; z<99; z++){[m
+[31m-                    printf("\u2501");[m
+[31m-                }      [m
+[31m-                printf("\u251b"); [m
+[32m+[m[32m                char str[20]="";[m
+[32m+[m[32m                strncpy(str, parking_lot[i][j][k].plate_num+6,4);  // UTF-8에서 한글: 3byte[m
+[32m+[m[32m                str[4]='\0';[m
+[32m+[m[32m                printf("│  %s  │", str);[m
+             }[m
+[32m+[m[32m            }printf("\n");[m
+[32m+[m[41m            [m
+[32m+[m[32m            //번호판 출력 끝[m
+[32m+[m[32m            printf("    ");[m
+[32m+[m[32m            for(int k=0;k<10;k++){[m
+[32m+[m[32m            printf("└────────┘");[m
+[32m+[m[32m            }printf("\n");[m
+         }[m
+         printf("\n\n");[m
+         [m
+[36m@@ -99,8 +129,12 @@[m [mint display_parking_lot(LPARRAY lp_IArray){[m
+         system("stty -echo");[m
+         sel=getchar(); clear_buffer();[m
+         system("stty echo");[m
+[32m+[m[32m        system("clear");[m
+         int flag=sel-'0';  // char to int[m
+[31m-        if(flag==0) exit(0);[m
+[32m+[m[32m        if(flag==0){[m
+[32m+[m[32m            save(lp_IArray, lp_OArray);[m
+[32m+[m[32m            exit(0);[m
+[32m+[m[32m        }[m
+     }[m
+     return 0;[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpi_project/project/src/display_parking_lot.o b/Rpi_project/project/src/display_parking_lot.o[m
+[1mindex a3eb2d0..26ca9f9 100644[m
+Binary files a/Rpi_project/project/src/display_parking_lot.o and b/Rpi_project/project/src/display_parking_lot.o differ
+[1mdiff --git a/Rpi_project/project/src/enter_exit_manage.c b/Rpi_project/project/src/enter_exit_manage.c[m
+[1mindex 58c197c..f620671 100644[m
+[1m--- a/Rpi_project/project/src/enter_exit_manage.c[m
+[1m+++ b/Rpi_project/project/src/enter_exit_manage.c[m
+[36m@@ -76,8 +76,8 @@[m [mint car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){[m
+         return 1;   [m
+     }[m
+     if(car_positioning(lpcar)){ // 주차위치 결정[m
+[31m-        printf("fail to execute car_positioning.\n");[m
+[31m-        return 1;[m
+[32m+[m[32m        printf("해당 주차위치에는 주차하실 수 없습니다.\n");[m
+[32m+[m[32m        return 0;[m
+     }[m
+     if(arrayAdd(lpInput, (const LPDATA) lpcar)) return 1;   //lp_input_car_Array에 append[m
+     [m
+[1mdiff --git a/Rpi_project/project/src/enter_exit_manage.o b/Rpi_project/project/src/enter_exit_manage.o[m
+[1mindex 79f2546..ed345bd 100644[m
+Binary files a/Rpi_project/project/src/enter_exit_manage.o and b/Rpi_project/project/src/enter_exit_manage.o differ
+[1mdiff --git a/Rpi_project/project/src/long_term_parking_list.c b/Rpi_project/project/src/long_term_parking_list.c[m
+[1mindex 0f3b24d..1330ee1 100644[m
+[1m--- a/Rpi_project/project/src/long_term_parking_list.c[m
+[1m+++ b/Rpi_project/project/src/long_term_parking_list.c[m
+[36m@@ -4,7 +4,7 @@[m
+ #include "enter_exit_manage.h"[m
+ #include <time.h>[m
+ [m
+[31m-int time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int date)[m
+[32m+[m[32mint time_calc(Car_state *lpcar, int sel_date, int year, int mon, int date)[m
+ {[m
+     time_t     tm_st, tm_st2;[m
+     time_t     tm_nd;[m
+[36m@@ -16,8 +16,8 @@[m [mint time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d[m
+         year = lpcar->enter_now.year;[m
+         mon = lpcar->enter_now.month;[m
+         date = lpcar->enter_now.day;[m
+[31m-        printf("%d %d %d\n",year, mon, date);[m
+     }[m
+[32m+[m[41m    [m
+         user_stime.tm_year   = year-1900;   // 주의 :년도는 1900년부터 시작[m
+         user_stime.tm_mon    = mon-1;      // 주의 :월은 0부터 시작[m
+         user_stime.tm_mday   = date;[m
+[36m@@ -65,13 +65,11 @@[m [mint time_calc(Car_state *lpcar, Time now, int sel_date, int year, int mon, int d[m
+ int long_term_parking_list(LPARRAY lpArray, int sel_date, int year, int mon, int date){[m
+     int nErr = ERR_ARRAY_OK;[m
+     Car_state *lpcar;[m
+[31m-    Time now;[m
+[31m-    // now_time(&now);[m
+     int size = arraySize(lpArray);[m
+     for(int i = 0; i < size; i++){[m
+     nErr = arrayGetAt(lpArray, i, (LPDATA*) &lpcar);[m
+     if (ERR_ARRAY_OK != nErr) return 1;[m
+[31m-    time_calc(lpcar, now, sel_date, year, mon, date);[m
+[32m+[m[32m    time_calc(lpcar, sel_date, year, mon, date);[m
+     }[m
+     return 0;[m
+ }[m
+\ No newline at end of file[m
+[1mdiff --git a/Rpi_project/project/src/long_term_parking_list.o b/Rpi_project/project/src/long_term_parking_list.o[m
+[1mindex 9663524..329c8ad 100644[m
+Binary files a/Rpi_project/project/src/long_term_parking_list.o and b/Rpi_project/project/src/long_term_parking_list.o differ
+[1mdiff --git a/Rpi_project/project/src/main.c b/Rpi_project/project/src/main.c[m
+[1mindex 5c9b7c3..fcebed3 100644[m
+[1m--- a/Rpi_project/project/src/main.c[m
+[1m+++ b/Rpi_project/project/src/main.c[m
+[36m@@ -27,7 +27,7 @@[m [mint main(void){[m
+     if(output_car_load(lp_output_car_Array)) return 1;[m
+ [m
+     init_parking_lot();[m
+[31m-    display_parking_lot(lp_input_car_Array); //@[m
+[32m+[m[32m    display_parking_lot(lp_input_car_Array,lp_output_car_Array);[m
+ [m
+     // 사용자 권한 선택[m
+     system("clear"); [m
+[36m@@ -154,7 +154,7 @@[m [mint main(void){[m
+                 }[m
+                 break;[m
+             case 3:[m
+[31m-                display_parking_lot(lp_input_car_Array); [m
+[32m+[m[32m                display_parking_lot(lp_input_car_Array,lp_output_car_Array);[m[41m [m
+                 break;[m
+             case 4:[m
+                 if(auth==1){[m
+[36m@@ -186,10 +186,11 @@[m [mint main(void){[m
+                         int sel_pl_num = 0; // select parking list num;[m
+                         int sel_date = 0;[m
+                         int year = 0, mon = 0, date = 0;[m
+[31m-                        scanf("%s",&sel_pl_num); getchar(); //flush newline[m
+[32m+[m[32m                        scanf("%d",&sel_pl_num); getchar(); //flush newline[m
+                         if(sel_pl_num == -1) break;[m
+                         else if(sel_pl_num == 1){[m
+                             while(1){[m
+[32m+[m[32m                            printf("일 수를 입력해주세요. (예 : 10)\n");[m
+                             scanf("%d", &sel_date); getchar();[m
+                             if(sel_date < 1)[m
+                                 printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");[m
+[36m@@ -222,6 +223,7 @@[m [mint main(void){[m
+                 break;[m
+         }[m
+     }while(1);[m
+[32m+[m[32m    save(lp_input_car_Array,lp_output_car_Array);[m[41m  [m
+ [m
+     return 0;[m
+ }[m
+[1mdiff --git a/Rpi_project/project/src/main.o b/Rpi_project/project/src/main.o[m
+[1mindex f42530a..c09fa4d 100644[m
+Binary files a/Rpi_project/project/src/main.o and b/Rpi_project/project/src/main.o differ
+[1mdiff --git a/Rpi_project/project/src/parking_status.c b/Rpi_project/project/src/parking_status.c[m
+[1mindex 2b9662c..4f70352 100644[m
+[1m--- a/Rpi_project/project/src/parking_status.c[m
+[1m+++ b/Rpi_project/project/src/parking_status.c[m
+[36m@@ -5,7 +5,9 @@[m
+ #include "enter_exit_manage.h"[m
+ #include "parking_status.h"[m
+ [m
+[31m-int parking_status_check(LPARRAY lpArray, Car_state parking_lot[3][10][10])[m
+[32m+[m[32mextern Car_state parking_lot[3][3][10];[m
+[32m+[m
+[32m+[m[32mint parking_status_check(LPARRAY lpArray)[m
+ {[m
+   int floor;[m
+   printf("안내받을 층을 입력해주세요 : ");[m
+[36m@@ -38,12 +40,14 @@[m [mint parking_status_check(LPARRAY lpArray, Car_state parking_lot[3][10][10])[m
+ [m
+ // parking_status_check제거예정@[m
+ [m
+[31m-int inputline(FILE* fp, char** str)[m
+[32m+[m[32mint inputline(FILE* fp, char** str, int *str_size)[m
+ {[m
+   static char line[256];[m
+   int i;[m
+[32m+[m[32m  int cnt=0;[m
+   for (i=0;i<256;i++){[m
+     line[i] = fgetc(fp);[m
+[32m+[m[32m    cnt++;[m
+     if (line[i] == '\n'){[m
+       break;[m
+     }[m
+[36m@@ -52,7 +56,7 @@[m [mint inputline(FILE* fp, char** str)[m
+     }[m
+   }[m
+   line[i] = '\0';[m
+[31m-[m
+[32m+[m[32m  *str_size=cnt;[m
+   // static 지역변수의 주소를 반환 -> 다른 함수에서 사용 가능[m
+   *str = line;[m
+   return 0;[m
+[36m@@ -74,38 +78,44 @@[m [mint info_car_num(LPARRAY lpArray,char *car_num, int *flag)[m
+   return 1;[m
+ }[m
+ [m
+[31m-int info_car_loc(LPARRAY lpArray, char* car_loc, int *flag)[m
+[32m+[m[32mint info_car_loc(LPARRAY lpArray, char *car_loc, int *flag, int str_size)[m
+ {[m
+[31m-  extern Car_state parking_lot[3][10][10];[m
+   Car_state *tmp;[m
+[31m-  for(int i=0; i<arraySize(lpArray);i++){[m
+[31m-    arrayGetAt(lpArray,i,(LPDATA*) &tmp);[m
+[31m-  [m
+[31m-    int floor, row, col;[m
+[31m-    floor = (int)car_loc[1]-(int)'0'-1;[m
+[31m-    row = (int)car_loc[3]-(int)'0'-1;[m
+[31m-    col = (int)car_loc[5]-(int)'0'-1;[m
+[32m+[m[32m  int floor, row, col;[m
+ [m
+[31m-    if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){ [m
+[31m-      disp_car_state(tmp);[m
+[31m-      *flag=0;[m
+[31m-      return 0;[m
+[31m-    }[m
+[31m-  }  [m
+[32m+[m[32m  if(str_size==7){[m
+[32m+[m[32m    for(int i=0; i<arraySize(lpArray);i++){[m
+[32m+[m[32m      arrayGetAt(lpArray,i,(LPDATA*) &tmp);[m
+[32m+[m[41m      [m
+[32m+[m[32m      floor = (int)car_loc[1]-(int)'0'-1;[m
+[32m+[m[32m      row = (int)car_loc[3]-(int)'0'-1;[m
+[32m+[m[32m      col = (int)car_loc[5]-(int)'0'-1;[m
+[32m+[m[41m      [m
+[32m+[m[32m      if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){[m[41m [m
+[32m+[m[32m        disp_car_state(tmp);[m
+[32m+[m[32m        *flag=0;[m
+[32m+[m[32m        return 0;[m
+[32m+[m[32m      }[m
+[32m+[m[32m    }[m[41m  [m
+[32m+[m[32m  }[m
+[32m+[m[32m  else{[m
+[32m+[m[32m    printf("잘못된 형식으로 입력하셨습니다.\n");[m
+[32m+[m[32m    return 0;[m
+[32m+[m[32m  }[m
+   return 1;[m
+ }[m
+ [m
+ int parking_check(LPARRAY lpArray)[m
+ {[m
+[31m-  extern Car_state parking_lot[3][10][10];[m
+   int parking_check_key;[m
+   int cErr;[m
+   char *car_num;[m
+   char *car_loc;[m
+   int flag=1;[m
+[32m+[m[32m  int str_size;[m
+   while(flag)[m
+   {[m
+[31m-    printf("1: 차량번호를 입력, 2: 위치 입력, -1: 종료\n");[m
+[32m+[m[32m    printf("-1: 이전으로, 1: 차량번호를 입력, 2: 위치 입력\n");[m
+     char sel[5];[m
+     scanf("%s",&sel); getchar(); //flush newline[m
+     parking_check_key=atoi(sel); [m
+[36m@@ -113,7 +123,7 @@[m [mint parking_check(LPARRAY lpArray)[m
+     switch(parking_check_key){[m
+       case 1:[m
+         printf("차량 번호를 형식에 맞게 입력해주세요(예시: 111가1111)");[m
+[31m-        inputline(stdin, &car_num);[m
+[32m+[m[32m        inputline(stdin, &car_num, &str_size);[m
+         cErr = info_car_num(lpArray, car_num, &flag);[m
+         if(cErr){[m
+             printf("해당 자동차는 주차장에 없습니다.\n");[m
+[36m@@ -121,8 +131,8 @@[m [mint parking_check(LPARRAY lpArray)[m
+         break;[m
+       case 2:[m
+         printf("위치를 형식에 맞게 입력해주세요(예시: B1-3-3)");[m
+[31m-        inputline(stdin, &car_loc);[m
+[31m-        cErr = info_car_loc(lpArray, car_loc, &flag);[m
+[32m+[m[32m        inputline(stdin, &car_loc, &str_size);[m
+[32m+[m[32m        cErr = info_car_loc(lpArray, car_loc, &flag, str_size);[m
+         if(cErr){[m
+             printf("해당 자동차는 주차장에 없습니다.\n");[m
+         }[m
+[1mdiff --git a/Rpi_project/project/src/parking_status.o b/Rpi_project/project/src/parking_status.o[m
+[1mindex e1a8445..b7cbf9c 100644[m
+Binary files a/Rpi_project/project/src/parking_status.o and b/Rpi_project/project/src/parking_status.o differ
+[1mdiff --git a/bak/iparking_state.txt b/bak/iparking_state.txt[m
+[1mdeleted file mode 100644[m
+[1mindex 6fb2919..0000000[m
+[1m--- a/bak/iparking_state.txt[m
+[1m+++ /dev/null[m
+[36m@@ -1 +0,0 @@[m
+[31m-순번[1]: 차량정보:(G70,blue,222가2222)|주차위치:(B3,2,3)|입차시각:(2022.3.1 14h:6m:5s)|출차시각:(2022.3.1 14h:6m:5s)|인적사항:(2동 01022222222)[m
+[1mdiff --git a/dat/car_set.csv b/dat/car_set.csv[m
+[1mindex 940a32f..6ca2131 100644[m
+[1m--- a/dat/car_set.csv[m
+[1m+++ b/dat/car_set.csv[m
+[36m@@ -1,2 +1,33 @@[m
+[31m-sonata, red,111가1111,B1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,01011111111,0.1[m
+[31m- G70,blue,222가2222,B1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222222,0.1[m
+\ No newline at end of file[m
+[32m+[m[32msonata, red,111가1111,B1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,01011111111,0.0[m[41m [m
+[32m+[m[32m G70,blue,222가2222,B1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222222,0.0[m[41m [m
+[32m+[m[32mSPARK,silver,333가3333,B1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222223,0.0[m[41m [m
+[32m+[m[32mAvante,white,444하4444,B1,1,6,0,0,0,0,0,0,0,0,0,0,0,0,4,01022222224,0.0[m[41m [m
+[32m+[m[32mGrandeur,white,555나5555,B1,9,9,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222225,0.0[m[41m [m
+[32m+[m[32mVenue,black,666다6666,B1,8,7,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222226,0.0[m[41m [m
+[32m+[m[32mKona,blue,777라7777,B1,5,6,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222227,0.0[m[41m [m
+[32m+[m[32mTucson,blue,888마8888,B2,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222228,0.0[m[41m [m
+[32m+[m[32mSantefe,grey,999바9999,B2,7,3,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222229,0.0[m[41m [m
+[32m+[m[32mPalisade,blue,111사1111,B2,4,5,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222230,0.0[m[41m [m
+[32m+[m[32mStaria,black,222아2222,B2,5,7,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222231,0.0[m[41m [m
+[32m+[m[32mNexo,Yellow,333자3333,B2,3,4,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222232,0.0[m[41m [m
+[32m+[m[32mIONIQ,white,444차4444,B2,5,9,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222233,0.0[m[41m [m
+[32m+[m[32mPoter,blue,555카5555,B2,2,6,0,0,0,0,0,0,0,0,0,0,0,0,4,01022222234,0.0[m[41m [m
+[32m+[m[32mVeloster,skyblue,666타6666,B3,1,5,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222235,0.0[m[41m [m
+[32m+[m[32mCasper,silver,777파7777,B3,1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222236,0.0[m[41m [m
+[32m+[m[32mRay,white,888하8888,B3,1,3,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222237,0.0[m[41m [m
+[32m+[m[32mG90,white,999거9999,B3,6,3,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222238,0.0[m[41m [m
+[32m+[m[32mGV60,white,111너1111,B3,7,6,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222239,0.0[m[41m [m
+[32m+[m[32mGV80,white,222더2222,B3,8,1,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222240,0.0[m[41m [m
+[32m+[m[32mG80,white,333러3333,B3,3,2,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222241,0.0[m[41m [m
+[32m+[m[32msonata,black,23나1234,B1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,8,01022222242,0.0[m[41m [m
+[32m+[m[32msm5,blue,44호4431,B2,4,2,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222243,0.0[m[41m [m
+[32m+[m[32mStarex,red,21나3333,B3,8,3,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222244,0.0[m[41m [m
+[32m+[m[32mTucson,white,123바2222,B2,7,4,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222245,0.0[m[41m [m
+[32m+[m[32mSantefe,black,33육4010,B3,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222246,0.0[m[41m [m
+[32m+[m[32mi10,blue,01거5000,B1,3,6,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222247,0.0[m[41m [m
+[32m+[m[32mi30,red,126루1050,B2,2,7,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222248,0.0[m[41m [m
+[32m+[m[32mGenesis,white,37수4422,B3,1,8,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222249,0.0[m[41m [m
+[32m+[m[32mGalloper,black,38육4104,B2,1,9,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222250,0.0[m[41m [m
+[32m+[m[32mAslan,blue,67나8016,B3,5,10,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222251,0.0[m[41m [m
+[32m+[m[32mTuscani,red,152가3018,B1,4,2,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222252,0.0[m[41m [m
+[32m+[m[32mKona,white,55구1601,B2,8,1,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222253,0.0[m[41m [m
+\ No newline at end of file[m
+[1mdiff --git a/dat/car_set_list.csv b/dat/car_set_list.csv[m
+[1mindex 95bcb5f..59f3c93 100644[m
+[1m--- a/dat/car_set_list.csv[m
+[1m+++ b/dat/car_set_list.csv[m
+[36m@@ -1,2 +1,33 @@[m
+ sonata, red,111��1111,B1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,01011111111,0.0 [m
+  G70,blue,222��2222,B1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222222,0.0 [m
+[32m+[m[32mSPARK,silver,333��3333,B1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222223,0.0[m[41m [m
+[32m+[m[32mAvante,white,444��4444,B1,1,6,0,0,0,0,0,0,0,0,0,0,0,0,4,01022222224,0.0[m[41m [m
+[32m+[m[32mGrandeur,white,555��5555,B1,9,9,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222225,0.0[m[41m [m
+[32m+[m[32mVenue,black,666��6666,B1,8,7,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222226,0.0[m[41m [m
+[32m+[m[32mKona,blue,777��7777,B1,5,6,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222227,0.0[m[41m [m
+[32m+[m[32mTucson,blue,888��8888,B2,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222228,0.0[m[41m [m
+[32m+[m[32mSantefe,grey,999��9999,B2,7,3,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222229,0.0[m[41m [m
+[32m+[m[32mPalisade,blue,111��1111,B2,4,5,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222230,0.0[m[41m [m
+[32m+[m[32mStaria,black,222��2222,B2,5,7,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222231,0.0[m[41m [m
+[32m+[m[32mNexo,Yellow,333��3333,B2,3,4,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222232,0.0[m[41m [m
+[32m+[m[32mIONIQ,white,444��4444,B2,5,9,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222233,0.0[m[41m [m
+[32m+[m[32mPoter,blue,555ī5555,B2,2,6,0,0,0,0,0,0,0,0,0,0,0,0,4,01022222234,0.0[m[41m [m
+[32m+[m[32mVeloster,skyblue,666Ÿ6666,B3,1,5,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222235,0.0[m[41m [m
+[32m+[m[32mCasper,silver,777��7777,B3,1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222236,0.0[m[41m [m
+[32m+[m[32mRay,white,888��8888,B3,1,3,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222237,0.0[m[41m [m
+[32m+[m[32mG90,white,999��9999,B3,6,3,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222238,0.0[m[41m [m
+[32m+[m[32mGV60,white,111��1111,B3,7,6,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222239,0.0[m[41m [m
+[32m+[m[32mGV80,white,222��2222,B3,8,1,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222240,0.0[m[41m [m
+[32m+[m[32mG80,white,333��3333,B3,3,2,0,0,0,0,0,0,0,0,0,0,0,0,3,01022222241,0.0[m[41m [m
+[32m+[m[32msonata,black,23��1234,B1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,8,01022222242,0.0[m[41m [m
+[32m+[m[32msm5,blue,44ȣ4431,B2,4,2,0,0,0,0,0,0,0,0,0,0,0,0,2,01022222243,0.0[m[41m [m
+[32m+[m[32mStarex,red,21��3333,B3,8,3,0,0,0,0,0,0,0,0,0,0,0,0,1,01022222244,0.0[m[41m [m
+[32m+[m[32mTucson,white,123��2222,B2,7,4,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222245,0.0[m[41m [m
+[32m+[m[32mSantefe,black,33��4010,B3,6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222246,0.0[m[41m [m
+[32m+[m[32mi10,blue,01��5000,B1,3,6,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222247,0.0[m[41m [m
+[32m+[m[32mi30,red,126��1050,B2,2,7,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222248,0.0[m[41m [m
+[32m+[m[32mGenesis,white,37��4422,B3,1,8,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222249,0.0[m[41m [m
+[32m+[m[32mGalloper,black,38��4104,B2,1,9,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222250,0.0[m[41m [m
+[32m+[m[32mAslan,blue,67��8016,B3,5,10,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222251,0.0[m[41m [m
+[32m+[m[32mTuscani,red,152��3018,B1,4,2,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222252,0.0[m[41m [m
+[32m+[m[32mKona,white,55��1601,B2,8,1,0,0,0,0,0,0,0,0,0,0,0,0,0,01022222253,0.0[m[41m [m
+\ No newline at end of file[m
+[1mdiff --git a/dat/car_state.txt b/dat/car_state.txt[m
+[1mdeleted file mode 100644[m
+[1mindex e7045cd..0000000[m
+[1m--- a/dat/car_state.txt[m
+[1m+++ /dev/null[m
+[36m@@ -1,20 +0,0 @@[m
+[31m-[m
+[31m-// main함수 내에 아래 내용을 붙혀서 car_set.dat제작.[m
+[31m-// Car_state의 크기는 128byte이므로 파일크기확인해서 제대로 save됐는지 확인가능.[m
+[31m-// person.dong이 0이면 임직원아님.[m
+[31m-[m
+[31m-    // Time now;[m
+[31m-    // Car_state car[]={ { "sonata", "red", "111가1111", {"B1",1,1}, now, now, {1,"01011111111"},0},[m
+[31m-    //                     { "G70", "blue", "222가2222", {"B1",1,2}, now, now, {2,"01022222222"},0},[m
+[31m-    //                     { "casper", "white", "333가3333", {"B1",1,3}, now, now, {3,"01033333333"},0},[m
+[31m-    //                     { "avante", "red", "444가4444", {"B2",2,4}, now, now, {4,"01044444444"},0},[m
+[31m-    //                     { "c200", "silver", "555가5555", {"B3",2,5}, now, now, {5,"01055555555"},0},[m
+[31m-    //                     { "c200", "silver", "666가6666", {"B3",2,6}, now, now, {0,"01055555555"},0},[m
+[31m-    //                     { "avante", "red", "444가4444", {"B2",2,4}, now, now, {4,"01044444444"},0}[m
+[31m-    //                     };[m
+[31m-    // car_set_save(car,sizeof(car));[m
+[31m-[m
+[31m-//프로그램 내에서 정보입력받고 car배열 변경하는 방법도 고려할 수 있음[m
+[31m-[m
+[31m-iconv -c -f euc-kr -t utf-8 car_set_list.csv > car_set.csv[m
+[31m-file -bi [파일명] //utf-8로 인코딩변한것 확인[m
+\ No newline at end of file[m
+[1mdiff --git a/dat/io_state.dat b/dat/io_state.dat[m
+[1mdeleted file mode 100644[m
+[1mindex e69de29..0000000[m
+[1mdiff --git a/dat/iparking_state.dat b/dat/iparking_state.dat[m
+[1mdeleted file mode 100644[m
+[1mindex e69de29..0000000[m
+[1mdiff --git a/dat/oparking_state.dat b/dat/oparking_state.dat[m
+[1mdeleted file mode 100644[m
+[1mindex e69de29..0000000[m
+[1mdiff --git a/src/car_set.csv b/src/car_set.csv[m
+[1mdeleted file mode 100644[m
+[1mindex e69de29..0000000[m
+[1mdiff --git a/src/main.c b/src/main.c[m
+[1mindex d50414f..83b2f89 100644[m
+[1m--- a/src/main.c[m
+[1m+++ b/src/main.c[m
+[36m@@ -35,37 +35,36 @@[m [mint main(void){[m
+     printf("사용자 권한을 선택하세요.(1:Admin 2:User)\n>");[m
+     int auth;[m
+     while(1){[m
+[31m-        char sel[5];[m
+[31m-        scanf("%s",&sel); getchar(); //flush newline[m
+[31m-        auth=atoi(sel); [m
+[31m-[m
+[32m+[m[32m        char c;[m
+[32m+[m[32m        c=getchar(); clear_buffer();[m
+[32m+[m[32m        auth=(int)c-'0';[m[41m [m
+         if(auth!=1 && auth!=2){[m
+             printf("잘못 입력했습니다. \n");[m
+             continue;[m
+         }[m
+         break;[m
+     }[m
+[31m-    //test @[m
+[31m-    printf("==============\n");[m
+[31m-    Car_state *lpcar;    [m
+[31m-    for(int i=0; i<lp_car_set_Array->size; i++){[m
+[31m-        if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[31m-        disp_car_state(lpcar);[m
+[31m-    }[m
+[31m-    printf("==============\n");[m
+[32m+[m[32m    // //test @[m
+[32m+[m[32m    // printf("==============\n");[m
+[32m+[m[32m    // Car_state *lpcar;[m[41m    [m
+[32m+[m[32m    // for(int i=0; i<lp_car_set_Array->size; i++){[m
+[32m+[m[32m    //     if(arrayGetAt(lp_car_set_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[32m+[m[32m    //     disp_car_state(lpcar);[m
+[32m+[m[32m    // }[m
+[32m+[m[32m    // printf("==============\n");[m
+ [m
+[31m-    for(int i=0; i<lp_input_car_Array->size; i++){[m
+[31m-        if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[31m-        disp_car_state(lpcar);[m
+[31m-    }[m
+[31m-    printf("==============\n");[m
+[32m+[m[32m    // for(int i=0; i<lp_input_car_Array->size; i++){[m
+[32m+[m[32m    //     if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[32m+[m[32m    //     disp_car_state(lpcar);[m
+[32m+[m[32m    // }[m
+[32m+[m[32m    // printf("==============\n");[m
+ [m
+[31m-    for(int i=0; i<lp_output_car_Array->size; i++){[m
+[31m-        if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[31m-        disp_car_state(lpcar);[m
+[31m-    }[m
+[31m-    printf("==============\n");[m
+[31m-    //test @[m
+[32m+[m[32m    // for(int i=0; i<lp_output_car_Array->size; i++){[m
+[32m+[m[32m    //     if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[32m+[m[32m    //     disp_car_state(lpcar);[m
+[32m+[m[32m    // }[m
+[32m+[m[32m    // printf("==============\n");[m
+[32m+[m[32m    // //test @[m
+ [m
+     if(auth==1){[m
+         char passwd[]="0000";[m
+[36m@@ -104,10 +103,10 @@[m [mint main(void){[m
+             printf("select ---> ");[m
+         }[m
+         [m
+[31m-        char sel[5];[m
+[31m-        scanf("%s",&sel); getchar(); //flush newline[m
+[31m-        int no=atoi(sel);           [m
+[31m-        [m
+[32m+[m[32m        char c;[m
+[32m+[m[32m        c=getchar(); clear_buffer();[m
+[32m+[m[32m        int no=(int)c-'0';[m[41m [m
+[32m+[m
+         switch(no){[m
+             case 1:[m
+                 while(1){ [m
+[36m@@ -115,6 +114,7 @@[m [mint main(void){[m
+                     char sel[5];[m
+                     scanf("%s",&sel); getchar(); //flush newline[m
+                     int sel_en_ex=atoi(sel);[m
+[32m+[m
+                     if(sel_en_ex==1){           [m
+                         printf("입차하는 자동차는 몇번 자동차입니까? \n>>");[m
+                         char sel[5];[m
+[1mdiff --git a/src/main.exe b/src/main.exe[m
+[1mindex 4143b40..535c4db 100644[m
+Binary files a/src/main.exe and b/src/main.exe differ
+[1mdiff --git a/src/parking_history.c b/src/parking_history.c[m
+[1mindex 6ae68ec..04f010d 100644[m
+[1m--- a/src/parking_history.c[m
+[1m+++ b/src/parking_history.c[m
+[36m@@ -66,27 +66,22 @@[m [mint parking_history(LPARRAY lp_input_car_Array, LPARRAY lp_output_car_Array){[m
+     [m
+     Car_state *lpcar;[m
+     system("clear");[m
+[31m-    printf("\n\n");[m
+[32m+[m[32m    printf("\n");[m
+     printf("현재 입차 내역 : \n\n");[m
+     for(int i=0; i<lp_input_car_Array->size; i++){[m
+         if(arrayGetAt(lp_input_car_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[31m-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\[m
+[31m-        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\[m
+[31m-        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\[m
+[31m-        lpcar->person.dong, lpcar->person.contac_num); [m
+[32m+[m[32m        disp_car_state(lpcar);[m
+[32m+[m[32m        printf("\n");[m
+     }[m
+     printf("\n\n");[m
+     printf("==============\n");[m
+[31m-    printf("\n\n");[m
+[32m+[m[32m    printf("\n");[m
+ [m
+     printf("출차 내역 : \n\n");[m
+     for(int i=0; i<lp_output_car_Array->size; i++){[m
+         if(arrayGetAt(lp_output_car_Array, i, (LPDATA*) &lpcar)) return 1;[m
+[31m-        printf("차량정보:(%s,%s,%s)|주차위치:(%s,%d,%d)|입차시각:(%d.%d.%d %dh:%dm:%ds)|출차시각:(%d.%d.%d %dh:%dm:%ds)|인적사항:(%d동, %s)\n",\[m
+[31m-        lpcar->car_type, lpcar->color, lpcar->plate_num, lpcar->location.floor, lpcar->location.row+1, lpcar->location.col+1,\[m
+[31m-        lpcar->enter_now.year, lpcar->enter_now.month, lpcar->enter_now.day, lpcar->enter_now.hour, lpcar->enter_now.minute, lpcar->enter_now.second,\[m
+[31m-        lpcar->exit_now.year, lpcar->exit_now.month, lpcar->exit_now.day, lpcar->exit_now.hour, lpcar->exit_now.minute, lpcar->exit_now.second,\[m
+[31m-        lpcar->person.dong, lpcar->person.contac_num); [m
+[32m+[m[32m        disp_car_state(lpcar);[m
+[32m+[m[32m        printf("\n");[m
+     }[m
+     printf("\n\n");[m
+     printf("==============\n\n");[m

@@ -41,5 +41,6 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num);
 int car_state_remove(LPARRAY lpInput, LPARRAY lpOutput, LPARRAY lpCarset, int car_num);
 int disp_car_state(Car_state *lpcar);
 int save(LPARRAY lpiArray, LPARRAY lpoArray);
+int exit_time(Car_state *lpcar);
 
 #endif 

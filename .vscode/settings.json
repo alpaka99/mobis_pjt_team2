@@ -11,6 +11,7 @@
         "fee_calculate.h": "c",
         "array.h": "c",
         "parking_history.h": "c",
-        "cmath": "c"
+        "cmath": "c",
+        "car_positioning.h": "c"
     }
 }

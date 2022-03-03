@@ -27,7 +27,7 @@ int main(void){
     if(output_car_load(lp_output_car_Array)) return 1;
 
     init_parking_lot();
-    display_parking_lot(lp_input_car_Array); //@
+    display_parking_lot(lp_input_car_Array,lp_output_car_Array);
 
     // 사용자 권한 선택
     system("clear"); 
@@ -154,7 +154,7 @@ int main(void){
                 }
                 break;
             case 3:
-                display_parking_lot(lp_input_car_Array); 
+                display_parking_lot(lp_input_car_Array,lp_output_car_Array); 
                 break;
             case 4:
                 if(auth==1){
@@ -186,10 +186,11 @@ int main(void){
                         int sel_pl_num = 0; // select parking list num;
                         int sel_date = 0;
                         int year = 0, mon = 0, date = 0;
-                        scanf("%s",&sel_pl_num); getchar(); //flush newline
+                        scanf("%d",&sel_pl_num); getchar(); //flush newline
                         if(sel_pl_num == -1) break;
                         else if(sel_pl_num == 1){
                             while(1){
+                            printf("일 수를 입력해주세요. (예 : 10)\n");
                             scanf("%d", &sel_date); getchar();
                             if(sel_date < 1)
                                 printf("올바른 숫자를 입력해주세요. 최소 크기는 1 이상입니다.\n");
@@ -222,6 +223,7 @@ int main(void){
                 break;
         }
     }while(1);
+    save(lp_input_car_Array,lp_output_car_Array);  
 
     return 0;
 }

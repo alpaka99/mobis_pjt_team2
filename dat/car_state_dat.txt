@@ -1,4 +1,3 @@
-
 // main함수 내에 아래 내용을 붙혀서 car_set.dat제작.
 // Car_state의 크기는 128byte이므로 파일크기확인해서 제대로 save됐는지 확인가능.
 // person.dong이 0이면 임직원아님.
@@ -13,8 +12,3 @@
     //                     { "avante", "red", "444가4444", {"B2",2,4}, now, now, {4,"01044444444"},0}
     //                     };
     // car_set_save(car,sizeof(car));
-
-//프로그램 내에서 정보입력받고 car배열 변경하는 방법도 고려할 수 있음
-
-iconv -c -f euc-kr -t utf-8 car_set_list.csv > car_set.csv
-file -bi [파일명] //utf-8로 인코딩변한것 확인

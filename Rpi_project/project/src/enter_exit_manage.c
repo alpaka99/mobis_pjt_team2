@@ -76,8 +76,8 @@ int car_state_append(LPARRAY lpInput, LPARRAY lpCarset, int car_num){
         return 1;   
     }
     if(car_positioning(lpcar)){ // 주차위치 결정
-        printf("fail to execute car_positioning.\n");
-        return 1;
+        printf("해당 주차위치에는 주차하실 수 없습니다.\n");
+        return 0;
     }
     if(arrayAdd(lpInput, (const LPDATA) lpcar)) return 1;   //lp_input_car_Array에 append
     
