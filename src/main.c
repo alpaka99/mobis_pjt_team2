@@ -179,13 +179,13 @@ int main(void){
                     system("clear");
                     printf("장기주차목록 \n");
                     while(1){
-                        int sel_pl_num = 0; // select parking list num;
-                        int sel_date = 0;
-                        int year = 0, mon = 0, date = 0;
                         printf("다음과 같은 목록 중 검색하고 싶은 양식을 선택해주세요.\n");
                         printf("1. 일 수 (예 : 500일 이상으로 장기 주차한 차량에 대해 검색) \n");
                         printf("2. 날짜 (예 : 2020년 3월 1일 이전에 입차했던 차량에 대해 검색 \n");
                         printf("-1. 뒤로가기 \n");
+                        int sel_pl_num = 0; // select parking list num;
+                        int sel_date = 0;
+                        int year = 0, mon = 0, date = 0;
                         scanf("%s",&sel_pl_num); getchar(); //flush newline
                         if(sel_pl_num == -1) break;
                         else if(sel_pl_num == 1){
