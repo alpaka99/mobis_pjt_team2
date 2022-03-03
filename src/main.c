@@ -239,6 +239,11 @@ int main(void){
                 system("clear");
                 printf("빈 공간 추천");
                 empty_space_recom(parking_lot);
+                printf("(다음: 아무거나입력)");
+                system("stty -echo");
+                sel_c=getchar(); clear_buffer();
+                system("stty echo");
+                system("clear");
                 break;
             case 8:
                 printf("exit function \n");

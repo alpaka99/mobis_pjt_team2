@@ -3,6 +3,7 @@
 #include "../include/empty_space_recom.h"
 #include "../include/enter_exit_manage.h"
 #include <string.h>
+#include "display_parking_lot.h"
 
 int empty_space_recom(Car_state parking_lot[3][3][10])
 {
@@ -18,11 +19,13 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
 
   while(1)
   {
-    printf("주차하고 싶은 층은 입력해주세요(뒤로 가기 = -1) : \n");
-    scanf("%d",&f);getchar();
+    printf("주차하고 싶은 층을 입력해주세요.(0: 이전으로, 1: B1, 2: B2, 3:B3)\n");
+    char c;
+    c=getchar(); clear_buffer();
+    f=(int)c-'0'; 
 
     // 탈출 및 예외처리
-    if(f == -1){
+    if(f == 0){
       return 0;
     }
     else if(f>=1 && f<=3){
@@ -32,13 +35,11 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
       printf("옳지 않은 층입니다.\n");
       continue;
     }
-    printf("floor %d\n", f);
 
     // delta를 사용해서 탐색
     // W, SW, S, SE, E, NE, N, NW
     int dr[8] = {0, 1, 1, 1, 0, -1, -1, -1};
     int dc[8] = {-1, -1, 0, 1, 1, 1, 0, -1};
-
 
 // 여기까지 괜춘
 
@@ -46,14 +47,14 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
     
     init_queue(qPtr); // queue 초기화
 
-    enqueue(qPtr,0,5); // 직원용 출입구는 각 층의 [0][5]와 가장 가깝다고 가정
-    visited[f][0][5] = 1;
+    enqueue(qPtr,0,4); // 직원용 출입구는 각 층의 [0][5]와 가장 가깝다고 가정
+    visited[f][0][4] = 1;
 
     //0,5가 빈자리일떄
-    if(strcmp(parking_lot[f][0][5].plate_num, "")==0)
+    if(strcmp(parking_lot[f][0][4].plate_num, "")==0)
     {
       char rr = (char)(0+(int)'A');
-      printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, 5);
+      printf("지하 %d층의 추천 자리는 %c%d입니다.\n", f+1, rr, 5);
       return 0;
     }
 
@@ -65,7 +66,7 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
         nr = r+dr[i];
         nc = c+dc[i];
         
-        // printf("%d %d %d : ", f, nr, nc);
+        printf("%d %d %d : ", f, nr, nc);
         if((0<=nr && nr<=2 && 0<=nc && nc<=9) == 0){ // 범위를 벗어나면
           // printf("CCCCC %d %d\n", nr, nc);
           continue; // next iteration 
@@ -76,7 +77,7 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
           if(strcmp(parking_lot[f][nr][nc].plate_num, "")==0) // 자리에 차가 없으면
           {
             char rr = (char)(nr+(int)'A');
-            printf("%d층의 추천 자리는 %c%d입니다.\n", f, rr, nc);
+            printf("지하 %d층의 추천 자리는 %c%d입니다.\n", f+1, rr+1, nc+1);
             // printf("%d %c %d\n", f, rr, nc);
             return 0;
           }
@@ -87,7 +88,6 @@ int empty_space_recom(Car_state parking_lot[3][3][10])
             visited[f][nr][nc] = 1;
           }
         }
-        
       }
     }
     // 다 돌았는데 추천 자리가 없음 -> 꽉찼다.
