@@ -115,7 +115,7 @@ int parking_check(LPARRAY lpArray)
   int str_size;
   while(flag)
   {
-    printf("1: 차량번호를 입력, 2: 위치 입력, -1: 종료\n");
+    printf("-1: 이전으로, 1: 차량번호를 입력, 2: 위치 입력\n");
     char sel[5];
     scanf("%s",&sel); getchar(); //flush newline
     parking_check_key=atoi(sel); 
