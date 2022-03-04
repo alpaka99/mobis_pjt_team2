@@ -46,7 +46,7 @@ int car_positioning(Car_state *car){
         scanf("%s",str); 
         strncpy(str2,str,2); str[2]='\0'; 
         int col=atoi(str2);
-        printf("col: %d",col);
+        // printf("col: %d",col);
         if(!(col>=1 && col<=10)){
             printf("잘못입력하셨습니다.\n");
             printf("(다음: 아무거나입력)");
