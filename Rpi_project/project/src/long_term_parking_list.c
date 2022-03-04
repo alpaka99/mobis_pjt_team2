@@ -32,17 +32,17 @@ int time_calc(Car_state *lpcar, int sel_min, int year, int mon, int date)
     tm_st = mktime( &user_stime);
     time( &tm_nd);
     d_diff = difftime( tm_nd, tm_st);       //현재-입차
-    tm_day = d_diff / (60 * 60 * 24);
-    d_diff = d_diff - (tm_day * 60 * 60 * 24);
+    // tm_day = d_diff / (60 * 60 * 24);
+    // d_diff = d_diff - (tm_day * 60 * 60 * 24);
     
-    tm_hour = d_diff / (60 * 60);
-    d_diff = d_diff - (tm_hour * 60 * 60);
+    // tm_hour = d_diff / (60 * 60);
+    // d_diff = d_diff - (tm_hour * 60 * 60);
     
-    tm_min = d_diff / 60;
-    d_diff = d_diff - (tm_min * 60);
+    // tm_min = d_diff / 60;
+    // d_diff = d_diff - (tm_min * 60);
     
-    tm_sec = d_diff;
-    if(sel_min > 0 && tm_min >= sel_min){ // sel_date 보다 tm_day가 더 크면 -> 장기 주차 기간이 내가 설정한 날보다 크면
+    // tm_sec = d_diff;
+    if(sel_min > 0 && (d_diff/60) >= sel_min){ // sel_date 보다 tm_day가 더 크면 -> 장기 주차 기간이 내가 설정한 날보다 크면
         until_now_cost(lpcar);
         //현재까지 발생된 주차요금을 포함하여 정보 출력
     }

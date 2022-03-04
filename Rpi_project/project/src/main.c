@@ -65,7 +65,7 @@ int main(void){
     //     disp_car_state(lpcar);
     // }
     // printf("==============\n");
-    // //test @
+    // //test 
 
     if(auth==1){
         char passwd[]="0000";
@@ -148,6 +148,11 @@ int main(void){
                         if(sel_en_ex==-1) break;
                         printf("잘못 입력했습니다. \n");
                     }
+                    printf("(다음: 아무거나입력)");
+                    system("stty -echo");
+                    sel_c=getchar(); clear_buffer();
+                    system("stty echo");
+                    system("clear");
                 }
                 break;
             case 2:
