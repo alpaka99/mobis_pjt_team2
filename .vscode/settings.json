@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "string.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "save_load.h": "c",
+        "long_term_parking_list.h": "c",
+        "display_parking_lot.h": "c",
+        "enter_exit_manage.h": "c",
+        "parking_status.h": "c",
+        "fee_calculate.h": "c",
+        "array.h": "c",
+        "parking_history.h": "c",
+        "cmath": "c",
+        "car_positioning.h": "c"
+    }
+}

@@ -1,0 +1,3 @@
+iconv -c -f euc-kr -t utf-8 car_set_list.csv > car_set.csv
+rm car_set_list.csv 
+file -bi [파일명] //utf-8로 인코딩변한것 확인

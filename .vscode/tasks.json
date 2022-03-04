@@ -1,0 +1,37 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: arm-linux-gnueabihf-gcc.exe 활성 파일 빌드",
+			"command": "C:\\SysGCC\\raspberry\\bin\\arm-linux-gnueabihf-gcc.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"${file}",
+				"${fileDirname}\\array.c",
+				"${fileDirname}\\car_positioning.c",
+				"${fileDirname}\\fee_calculate.c",
+				"${fileDirname}\\enter_exit_manage.c",
+				"${fileDirname}\\long_term_parking_list.c",
+				"${fileDirname}\\parking_history.c",
+				"${fileDirname}\\save_load.c",
+				"${fileDirname}\\display_parking_lot.c",
+				"${fileDirname}\\parking_status.c",
+				"${fileDirname}\\empty_space_recom.c",
+				"-I",
+				"../include",
+				"-o",
+				"${fileDirname}\\${fileBasenameNoExtension}.exe"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "컴파일러: C:\\SysGCC\\raspberry\\bin\\arm-linux-gnueabihf-gcc.exe"
+		}
+	]
+}
