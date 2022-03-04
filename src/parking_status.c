@@ -89,20 +89,16 @@ int info_car_loc(LPARRAY lpArray, char *car_loc, int *flag, int str_size)
   token_2 = strtok(NULL, "-");
   token_3 = strtok(NULL, "-");
   // printf("token_1: %s, token_2: %s, token_3: %s\n",token_1,token_2,token_3);
-  if(str_size==7||str_size==8){ //B1-A-10
-    for(int i=0; i<arraySize(lpArray);i++){
-      arrayGetAt(lpArray,i,(LPDATA*) &tmp);
-      
-      floor = (int)token_1[1]-(int)'0'-1;
-      row = token_2[0]-(int)'A';  
-      col= atoi(token_3)-1;  
-      // printf("floor:%d, row:%d, col:%d\n",floor,row,col);
-      
-      if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){ 
-        until_now_cost(tmp);
-        *flag=0;
-        return 0;
-      }
+  if(str_size==7||str_size==8){ //B1-A-10      
+    floor = (int)token_1[1]-(int)'0'-1;
+    row = token_2[0]-(int)'A';  
+    col= atoi(token_3)-1;  
+    // printf("floor:%d, row:%d, col:%d\n",floor,row,col);
+    
+    if(strcmp(parking_lot[floor][row][col].plate_num,"")!=0){ 
+      until_now_cost(&parking_lot[floor][row][col]);
+      *flag=0;
+      return 0;
     }  
   }
   else{
